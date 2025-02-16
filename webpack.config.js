@@ -6,8 +6,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'chords', // 导出库为全局变量 chords
-    libraryTarget: 'umd' // 支持多种模块系统
+    libraryTarget: 'module' // 使用 ES6 模块
   },
   module: {
     rules: [
@@ -22,5 +21,8 @@ module.exports = {
         }
       }
     ]
+  },
+  experiments: {
+    outputModule: true // 启用 ES6 模块输出
   }
 };
