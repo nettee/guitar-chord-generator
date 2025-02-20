@@ -1,4 +1,4 @@
-import { ChordBox } from './dist/bundle.js';
+import { ChordBox } from '/dist/bundle.js';
 
 let chordBox = new ChordBox('#chord1', {
   // showTuning: false,
@@ -18,5 +18,5 @@ chordBox.draw({
   ],
 
   // optional: tuning keys
-  tuning: ['E', 'A', '3', 'G', 'B', 'E'],
+  tuning: ['E', 'A', '6', 'G', 'B', 'E'],
 });

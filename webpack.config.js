@@ -2,10 +2,11 @@
 const path = require('path');
 
 module.exports = {
-  entry: './chordbox.js',
+  entry: './src/chordbox.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist/',
     libraryTarget: 'module' // 使用 ES6 模块
   },
   module: {
