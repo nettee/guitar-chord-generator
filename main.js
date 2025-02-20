@@ -18,5 +18,5 @@ chordBox.draw({
   ],
 
   // optional: tuning keys
-  tuning: ['E', 'A', '2', 'G', 'B', 'E'],
+  tuning: ['E', 'A', '3', 'G', 'B', 'E'],
 });
