@@ -1,4 +1,4 @@
-import { ChordBox } from '/dist/bundle.js';
+import {ChordBox} from './chordbox.js';
 
 let F = {
   chord: [[1, 1], [2, 1], [3, 2], [4, 3], [5, 3], [6, 1]],
