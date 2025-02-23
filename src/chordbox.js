@@ -42,11 +42,6 @@ class ChordBox {
       this.params[param] = this.params[param] || this.params.strokeWidth;
     });
 
-    // Create canvas and add it to the DOM
-    this.canvas = SVG()
-      .addTo(sel)
-      .size(this.params.width, this.params.height);
-
     // Size and shift board
     this.width = this.params.width * 0.75;
     this.height = this.params.height * 0.75;
@@ -77,32 +72,21 @@ class ChordBox {
     this.tuning = ['E', 'A', 'D', 'G', 'B', 'E'];
   }
 
-  drawText(x, y, msg, attrs) {
-    const textAttrs = {
-      ...{
-        family: this.params.fontFamily,
-        size: this.metrics.fontSize,
-        style: this.params.fontStyle,
-        weight: this.params.fontWeight,
-      },
-      ...attrs,
-    };
-
-    const text = this.canvas
-      .text(`${msg}`)
-      .stroke(this.params.textColor)
-      .fill(this.params.textColor)
-      .font(textAttrs);
-
-    return text.move(x - text.length() / 2, y);
-  }
-
-  drawLine(x, y, newX, newY) {
-    return this.canvas.line(0, 0, newX - x, newY - y).move(x, y);
-  }
-
   draw({
-    chord, position, barres, positionText, tuning,
+         chord, position, barres, positionText, tuning,
+       }) {
+    // Create canvas and add it to the DOM
+    this.canvas = SVG()
+      .addTo(this.sel)
+      .size(this.params.width, this.params.height);
+
+    this.doDraw({
+      chord, position, barres, positionText, tuning,
+    });
+  }
+
+  doDraw({
+         chord, position, barres, positionText, tuning,
   }) {
     this.chord = chord;
     this.position = position || 0;
@@ -167,6 +151,30 @@ class ChordBox {
     for (let i = 0; i < this.barres.length; i += 1) {
       this.lightBar(this.barres[i].fromString, this.barres[i].toString, this.barres[i].fret);
     }
+  }
+
+  drawText(x, y, msg, attrs) {
+    const textAttrs = {
+      ...{
+        family: this.params.fontFamily,
+        size: this.metrics.fontSize,
+        style: this.params.fontStyle,
+        weight: this.params.fontWeight,
+      },
+      ...attrs,
+    };
+
+    const text = this.canvas
+      .text(`${msg}`)
+      .stroke(this.params.textColor)
+      .fill(this.params.textColor)
+      .font(textAttrs);
+
+    return text.move(x - text.length() / 2, y);
+  }
+
+  drawLine(x, y, newX, newY) {
+    return this.canvas.line(0, 0, newX - x, newY - y).move(x, y);
   }
 
   lightUp({ string, fret, label }) {
