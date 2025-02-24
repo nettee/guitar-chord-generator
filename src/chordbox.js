@@ -75,10 +75,31 @@ class ChordBox {
   draw({
          chord, position, barres, positionText, tuning,
        }) {
+    // 设置 viewBox
+    const originalWidth = this.params.width;
+    const originalHeight = this.params.height;
+
+    // 计算缩放比例
+    const parentElement = document.querySelector(this.sel);
+    const parentHeight = parentElement.clientHeight;
+    const parentWidth = parentElement.clientWidth;
+    const scaleFactor = parentHeight / originalHeight / 1.0;
+
     // Create canvas and add it to the DOM
     this.canvas = SVG()
       .addTo(this.sel)
-      .size(this.params.width, this.params.height);
+      .size(originalWidth, originalHeight) // 保持原始大小
+      .viewbox(0, 0, originalWidth, originalHeight) // 设置原始 viewBox
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // 然后用 scaleFactor 进行缩放
+    this.canvas.scale(scaleFactor);
+
+    // 如果要使图形居中，解注释以下代码，但是在平移前要先解决左上角没对齐的问题
+    // 平移图形以使其在父容器内居中
+    // const cx = (originalWidth * scaleFactor) / 2;
+    // const cy = (originalHeight * scaleFactor) / 2;
+    // this.canvas.translate((parentWidth - cx) / 2, (parentHeight - cy) / 2);
 
     this.doDraw({
       chord, position, barres, positionText, tuning,
