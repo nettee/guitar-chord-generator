@@ -83,7 +83,7 @@ class ChordBox {
     const parentElement = document.querySelector(this.sel);
     const parentHeight = parentElement.clientHeight;
     const parentWidth = parentElement.clientWidth;
-    const scaleFactor = parentHeight / originalHeight / 1.0;
+    const scaleFactor = parentHeight / originalHeight;
 
     // Create canvas and add it to the DOM
     this.canvas = SVG()
@@ -95,11 +95,10 @@ class ChordBox {
     // 然后用 scaleFactor 进行缩放
     this.canvas.scale(scaleFactor);
 
-    // 如果要使图形居中，解注释以下代码，但是在平移前要先解决左上角没对齐的问题
     // 平移图形以使其在父容器内居中
-    // const cx = (originalWidth * scaleFactor) / 2;
-    // const cy = (originalHeight * scaleFactor) / 2;
-    // this.canvas.translate((parentWidth - cx) / 2, (parentHeight - cy) / 2);
+    const tx = originalWidth * (scaleFactor - 1) / 2;
+    const ty = originalHeight * (scaleFactor - 1) / 2;
+    this.canvas.translate(tx, ty);
 
     this.doDraw({
       chord, position, barres, positionText, tuning,
