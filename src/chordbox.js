@@ -3,7 +3,7 @@
  * Mohit Muthanna Cheppudira -- http://0xfe.blogspot.com
  */
 
-import { SVG } from '@svgdotjs/svg.js';
+import {SVG} from '@svgdotjs/svg.js';
 
 // ChordBox implements the rendering logic for the chord
 // diagrams.
@@ -75,34 +75,32 @@ class ChordBox {
   draw({
          chord, position, barres, positionText, tuning,
        }) {
-    // 设置 viewBox
-    const originalWidth = this.params.width;
-    const originalHeight = this.params.height;
-
-    // 计算缩放比例
-    const parentElement = document.querySelector(this.sel);
-    const parentHeight = parentElement.clientHeight;
-    const parentWidth = parentElement.clientWidth;
-    const scaleFactor = parentHeight / originalHeight;
-
-    // Create canvas and add it to the DOM
-    this.canvas = SVG()
-      .addTo(this.sel)
-      .size(originalWidth, originalHeight) // 保持原始大小
-      .viewbox(0, 0, originalWidth, originalHeight) // 设置原始 viewBox
-      .attr('preserveAspectRatio', 'xMidYMid meet');
-
-    // 然后用 scaleFactor 进行缩放
-    this.canvas.scale(scaleFactor);
-
-    // 平移图形以使其在父容器内居中
-    const tx = originalWidth * (scaleFactor - 1) / 2;
-    const ty = originalHeight * (scaleFactor - 1) / 2;
-    this.canvas.translate(tx, ty);
+    this.createCanvas();
 
     this.doDraw({
       chord, position, barres, positionText, tuning,
     });
+  }
+
+  createCanvas() {
+    const originalWidth = this.params.width;
+    const originalHeight = this.params.height;
+
+    // Create canvas and add it to the DOM
+    this.canvas = SVG()
+      .addTo(this.sel)
+      .size(originalWidth, originalHeight)
+      .viewbox(0, 0, originalWidth, originalHeight)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // 根据父容器的大小缩放，并居中
+    const parentElement = document.querySelector(this.sel);
+    const parentHeight = parentElement.clientHeight;
+    const parentWidth = parentElement.clientWidth;
+    const scaleFactor = Math.min(parentHeight / originalHeight, parentWidth / originalWidth);
+
+    this.canvas.scale(scaleFactor);
+    this.canvas.translate((parentWidth - originalWidth) / 2, (parentHeight - originalHeight) / 2);
   }
 
   doDraw({
