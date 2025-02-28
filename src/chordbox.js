@@ -89,6 +89,7 @@ class ChordBox {
     // Create canvas and add it to the DOM
     this.canvas = SVG()
       .addTo(this.sel)
+      .attr('class', 'chord-svg')
       .size(originalWidth, originalHeight)
       .viewbox(0, 0, originalWidth, originalHeight)
       .attr('preserveAspectRatio', 'xMidYMid meet');
