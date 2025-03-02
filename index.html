@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <title>Vexchords 和弦图示例</title>
     <style>
-        .parent-div {
-            padding: 0; /* 移除任何内边距 */
-            margin: 0; /* 移除任何外边距 */
-            /*border: none; !* 移除边框 *!*/
-            border: 1px solid #000;
-
-            width: 180px;
+        .chord-group {
             height: 180px;
+            display: flex;           /* 启用弹性布局 */
+            gap: 10px;               /* 可选：设置子元素间距 */
+            /* justify-content: space-between; 可选：调整对齐方式 */
+        }
+        .chord {
+            /*border: 1px solid black; !* 可选：仅为演示添加边框 *!*/
+            width: 100%;             /* 使子元素填充父元素 */
         }
     </style>
 </head>
 <body>
-<div id="chord1" class="parent-div"></div>
-<div id="chord2" class="parent-div"></div>
+<div class="chord-group">
+    <div class="chord"></div>
+    <div class="chord"></div>
+    <div class="chord"></div>
+    <div class="chord"></div>
+    <div class="chord"></div>
+    <div class="chord"></div>
+    <div class="chord"></div>
+</div>
+
 <script type="module" src="/src/main.js"></script>
 </body>
 </html>
