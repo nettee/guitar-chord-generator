@@ -42,7 +42,7 @@ let C = {
 
 const groupName = 'C-4536251';
 
-const chordElements = document.querySelectorAll('.chord-group .chord');
+const chordElements = document.querySelectorAll('.chord-group .chord .chord-svg');
 const ids = [];
 for (let i = 0; i < chordElements.length; i++) {
   const id = `group-${groupName}-chord-${i + 1}`;
