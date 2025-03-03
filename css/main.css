@@ -1,0 +1,31 @@
+        .chord-group {
+            display: flex; /* 启用弹性布局 */
+            gap: 10px; /* 设置子元素间距 */
+            flex-wrap: wrap; /* 允许子元素换行 */
+            justify-content: center; /* 可选：调整对齐方式 */
+            align-items: flex-start; /* 可选：调整对齐方式 */
+            /*padding: 10px; !* 可选：添加内边距 *!*/
+        }
+
+        .chord {
+            display: flex;
+            flex-direction: column; /* 设置为列布局，使子元素上下排列 */
+            width: 100px; /* 设置每个 chord 的宽度 */
+            align-items: center; /* 可选：调整对齐方式 */
+            /*border: 1px solid #ddd; !* 可选：添加边框 *!*/
+        }
+
+        .chord-svg {
+            width: 100%; /* 使 SVG 图形填充父元素 */
+            height: 100%; /* 设置 SVG 图形的高度 */
+            display: flex;
+            justify-content: center; /* 可选：调整 SVG 图形的对齐方式 */
+            align-items: center; /* 可选：调整 SVG 图形的对齐方式 */
+        }
+
+        .chord-caption {
+            font-size: 12px; /* 设置说明文字的字体大小 */
+            color: #555; /* 设置说明文字的颜色 */
+            text-align: center; /* 设置说明文字的对齐方式 */
+            margin-top: 5px; /* 可选：设置说明文字与 SVG 图形之间的间距 */
+        }
