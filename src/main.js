@@ -48,16 +48,9 @@ function draw_4536251() {
     tuning: ['R', '5', 'R', 'T', '5', 'R'],
   };
   
-  const groupName = 'C-4536251';
-  
   const chordElements = document.querySelectorAll('.chord-group .chord .chord-svg');
   console.log(chordElements);
-  const ids = [];
-  for (let i = 0; i < chordElements.length; i++) {
-    const id = `group-${groupName}-chord-${i + 1}`;
-    chordElements[i].setAttribute('id', id);
-    ids.push(id);
-  }
+  const ids = Array.from(chordElements).map(element => element.id);
   
   const chords = [F, G, Em, Am, Dm, G, C];
   
@@ -65,6 +58,5 @@ function draw_4536251() {
     drawChord(ids[i], chords[i]);
   }  
 }
-
 
 export {draw_4536251};
