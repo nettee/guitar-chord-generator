@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { ChordBox } from '../chordbox.js';
 import { chordData } from '../data/chords.js';
 
+// TODO 不再传入 id，而是自动生成
 const Chord = ({ id, name }) => {
   // 用于获取 DOM 元素的引用，通过 chordRef.current 确认 DOM 元素是否已经挂载
   const chordRef = useRef(null);
@@ -24,9 +25,8 @@ const Chord = ({ id, name }) => {
       return;
     }
 
-    console.log('开始渲染和弦图:', name, id);
-    // TODO 使用 chordRef 获取 id，而不是直接传入 id
-    const chordBox = new ChordBox(`#${id}`, {
+    const elementId = chordRef.current.id;
+    const chordBox = new ChordBox(`#${elementId}`, {
       numFrets: 4,
     });
     chordBox.draw(chordData[name]);
