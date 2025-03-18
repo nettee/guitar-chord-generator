@@ -3,7 +3,9 @@ import { ChordBox } from '../chordbox.js';
 import { chordData } from '../data/chords.js';
 
 const Chord = ({ id, name }) => {
+  // 用于获取 DOM 元素的引用，通过 chordRef.current 确认 DOM 元素是否已经挂载
   const chordRef = useRef(null);
+  // 用于跟踪组件是否已经渲染过
   const hasRenderedRef = useRef(false); // 添加一个引用来跟踪是否已经渲染过
   
   useEffect(() => {
@@ -14,9 +16,11 @@ const Chord = ({ id, name }) => {
     
     console.log('组件挂载，name:', name);
     
+    // TODO 将错误检查前移
     // 确保组件挂载后再渲染和弦图
     if (chordRef.current && chordData[name]) {
       console.log('开始渲染和弦图:', name, id);
+      // TODO 使用 chordRef 获取 id，而不是直接传入 id
       const chordBox = new ChordBox(`#${id}`, {
         numFrets: 4,
       });

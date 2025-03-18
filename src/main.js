@@ -1,3 +1,4 @@
+// TODO 本文件不再使用了，可删除
 import {ChordBox} from './chordbox.js';
 
 function drawChord(id, chord) {
