@@ -14,23 +14,24 @@ const Chord = ({ id, name }) => {
       return;
     }
     
-    console.log('组件挂载，name:', name);
-    
-    // TODO 将错误检查前移
-    // 确保组件挂载后再渲染和弦图
-    if (chordRef.current && chordData[name]) {
-      console.log('开始渲染和弦图:', name, id);
-      // TODO 使用 chordRef 获取 id，而不是直接传入 id
-      const chordBox = new ChordBox(`#${id}`, {
-        numFrets: 4,
-      });
-      chordBox.draw(chordData[name]);
-      hasRenderedRef.current = true; // 标记为已渲染
-    } else {
-      console.error('无法渲染和弦图，原因:');
-      if (!chordRef.current) console.error('- chordRef.current 为空');
-      if (!chordData[name]) console.error(`- chordData["${name}"] 不存在`);
+    if (!chordRef.current) {
+      // 确保组件挂载后再渲染和弦图
+      console.error('无法渲染和弦图，原因: chordRef.current 为空');
+      return;
     }
+    if (!chordData[name]) {
+      console.error(`无法渲染和弦图，原因: chordData["${name}"] 不存在`);
+      return;
+    }
+
+    console.log('开始渲染和弦图:', name, id);
+    // TODO 使用 chordRef 获取 id，而不是直接传入 id
+    const chordBox = new ChordBox(`#${id}`, {
+      numFrets: 4,
+    });
+    chordBox.draw(chordData[name]);
+    hasRenderedRef.current = true; // 标记为已渲染
+    
   }, [id, name]);
 
   return (
