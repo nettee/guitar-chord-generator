@@ -2,8 +2,17 @@ import React, { useEffect, useRef } from 'react';
 import { ChordBox } from '../chordbox.js';
 import { chordData } from '../data/chords.js';
 
-// TODO 不再传入 id，而是自动生成
-const Chord = ({ id, name }) => {
+const generateRandomId = () => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randomIndex];
+  }
+  return result;
+};
+
+const Chord = ({ name }) => {
   // 用于获取 DOM 元素的引用，通过 chordRef.current 确认 DOM 元素是否已经挂载
   const chordRef = useRef(null);
   // 用于跟踪组件是否已经渲染过
@@ -32,11 +41,13 @@ const Chord = ({ id, name }) => {
     chordBox.draw(chordData[name]);
     hasRenderedRef.current = true; // 标记为已渲染
     
-  }, [id, name]);
+  }, [name]);
+
+  const chordSvgId = `chord-svg-${generateRandomId()}`;
 
   return (
     <div className="chord">
-        <div id={id} className="chord-svg" ref={chordRef}></div>
+        <div id={chordSvgId} className="chord-svg" ref={chordRef}></div>
         <div className="chord-caption">{name}</div>
     </div>
   );

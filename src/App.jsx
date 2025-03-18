@@ -8,7 +8,6 @@ const App = () => {
             {chordSequence.map((chordName, index) => (
                 <Chord 
                     key={index} 
-                    id={`chord-svg-${chordName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${index}`}
                     name={chordName} 
                 />
             ))}
