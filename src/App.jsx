@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
 import ChordGroup from './components/ChordGroup.jsx';
+import { roman_to_pitch } from './degree.js';
 
 const App = () => {
-    const [chordDescription, setChordDescription] = useState('F G Em Am Dm G C');
-    const [chordNames, setChordNames] = useState(['F', 'G', 'Em', 'Am', 'Dm', 'G', 'C']);
     const [selectedKey, setSelectedKey] = useState('C');
+    const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
+    const [pitchChordDescription, setPitchChordDescription] = useState('F G Em Am Dm G C');
+    const [chordNames, setChordNames] = useState(['F', 'G', 'Em', 'Am', 'Dm', 'G', 'C']);
     
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setChordDescription(value);
-        setChordNames(value.split(' '));
-    };
-
     const handleKeyChange = (e) => {
         setSelectedKey(e.target.value);
+    };
+
+    const handleInputChange = (e) => {
+        const romanChordDescription = e.target.value;
+        setChordDescription(romanChordDescription);
+
+        if (!romanChordDescription.trim()) {
+            setPitchChordDescription('');
+            setChordNames([]);
+            return;
+        }
+
+        const romanChordNames = romanChordDescription.trim().split(' ');
+        const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
+        setPitchChordDescription(pitchChordNames.join(' '));
+        setChordNames(pitchChordNames);
     };
 
     return (
@@ -47,8 +59,7 @@ const App = () => {
                         onChange={handleInputChange}
                     />
                     <textarea 
-                        value={chordDescription} 
-                        onChange={handleInputChange}
+                        value={pitchChordDescription} 
                         readOnly
                         style={{ backgroundColor: '#f0f0f0' }}
                     />
