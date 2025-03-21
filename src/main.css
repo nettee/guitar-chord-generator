@@ -9,23 +9,56 @@
 
         .chord {
             display: flex;
+            gap: 0px;
             flex-direction: column; /* 设置为列布局，使子元素上下排列 */
-            width: 100px; /* 设置每个 chord 的宽度 */
             align-items: center; /* 可选：调整对齐方式 */
-            /*border: 1px solid #ddd; !* 可选：添加边框 *!*/
+            /* border: 1px solid #ddd; !* 调试用：添加边框 *! */
         }
 
         .chord-svg {
-            width: 100%; /* 使 SVG 图形填充父元素 */
-            height: 100%; /* 设置 SVG 图形的高度 */
-            display: flex;
+            width: 100px; /* 使 SVG 图形填充父元素 */
+            height: 120px; /* 设置 SVG 图形的高度 */
             justify-content: center; /* 可选：调整 SVG 图形的对齐方式 */
             align-items: center; /* 可选：调整 SVG 图形的对齐方式 */
         }
 
         .chord-caption {
-            font-size: 12px; /* 设置说明文字的字体大小 */
+            font-family: "Helvetica", sans-serif;
+            font-size: 14px; /* 设置说明文字的字体大小 */
             color: #555; /* 设置说明文字的颜色 */
             text-align: center; /* 设置说明文字的对齐方式 */
-            margin-top: 5px; /* 可选：设置说明文字与 SVG 图形之间的间距 */
+            margin-top: auto; /* 可选：设置说明文字与 SVG 图形之间的间距 */
+        }
+
+        .input-container {
+            margin: 20px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            height: 150px;
+        }
+
+        .key-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .key-option label {
+            margin-left: 5px;
+        }
+
+        .chord-input {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chord-input textarea {
+            padding: 8px;
+            width: 40%;
+            height: 60%;
         }

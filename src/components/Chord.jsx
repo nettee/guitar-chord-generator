@@ -37,6 +37,7 @@ const Chord = ({ name }) => {
     const elementId = chordRef.current.id;
     const chordBox = new ChordBox(`#${elementId}`, {
       numFrets: 4,
+      showTuning: false,
     });
     chordBox.draw(chordData[name]);
     hasRenderedRef.current = true; // 标记为已渲染
