@@ -8,6 +8,15 @@ const App = () => {
     const [pitchChordDescription, setPitchChordDescription] = useState('F G Em Am Dm G C');
     const [chordNames, setChordNames] = useState(['F', 'G', 'Em', 'Am', 'Dm', 'G', 'C']);
     
+    // Define available keys
+    const availableKeys = [
+        { value: 'C', label: 'C大调' },
+        { value: 'G', label: 'G大调' },
+        { value: 'D', label: 'D大调' },
+        { value: 'A', label: 'A大调' },
+        { value: 'E', label: 'E大调' }
+    ];
+    
     const redraw = (selectedKey, chordDescription) => {
         if (!chordDescription.trim()) {
             setPitchChordDescription('');
@@ -43,26 +52,19 @@ const App = () => {
         <div>
             <div className="input-container">
                 <div className="key-selector">
-                    <div className="key-option">
-                        <input type="radio" id="key-c" name="key" value="C" checked={selectedKey === 'C'} onChange={handleKeyChange} />
-                        <label htmlFor="key-c">C大调</label>
-                    </div>
-                    <div className="key-option">
-                        <input type="radio" id="key-g" name="key" value="G" checked={selectedKey === 'G'} onChange={handleKeyChange} />
-                        <label htmlFor="key-g">G大调</label>
-                    </div>
-                    <div className="key-option">
-                        <input type="radio" id="key-d" name="key" value="D" checked={selectedKey === 'D'} onChange={handleKeyChange} />
-                        <label htmlFor="key-d">D大调</label>
-                    </div>
-                    <div className="key-option">
-                        <input type="radio" id="key-a" name="key" value="A" checked={selectedKey === 'A'} onChange={handleKeyChange} />
-                        <label htmlFor="key-a">A大调</label>
-                    </div>
-                    <div className="key-option">
-                        <input type="radio" id="key-e" name="key" value="E" checked={selectedKey === 'E'} onChange={handleKeyChange} />
-                        <label htmlFor="key-e">E大调</label>
-                    </div>
+                    {availableKeys.map(key => (
+                        <div className="key-option" key={key.value}>
+                            <input 
+                                type="radio" 
+                                id={`key-${key.value.toLowerCase()}`} 
+                                name="key" 
+                                value={key.value} 
+                                checked={selectedKey === key.value} 
+                                onChange={handleKeyChange} 
+                            />
+                            <label htmlFor={`key-${key.value.toLowerCase()}`}>{key.label}</label>
+                        </div>
+                    ))}
                 </div>
                 <div className="chord-input">
                     <textarea 
