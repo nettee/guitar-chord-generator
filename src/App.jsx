@@ -8,24 +8,35 @@ const App = () => {
     const [pitchChordDescription, setPitchChordDescription] = useState('F G Em Am Dm G C');
     const [chordNames, setChordNames] = useState(['F', 'G', 'Em', 'Am', 'Dm', 'G', 'C']);
     
-    const handleKeyChange = (e) => {
-        setSelectedKey(e.target.value);
-    };
-
-    const handleInputChange = (e) => {
-        const romanChordDescription = e.target.value;
-        setChordDescription(romanChordDescription);
-
-        if (!romanChordDescription.trim()) {
+    const redraw = (selectedKey, chordDescription) => {
+        if (!chordDescription.trim()) {
             setPitchChordDescription('');
             setChordNames([]);
             return;
         }
 
-        const romanChordNames = romanChordDescription.trim().split(' ');
+        const romanChordNames = chordDescription
+            .trim()
+            .split(' ')
+            .map(roman => roman.trim())
+            .filter(roman => roman !== '');
         const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
         setPitchChordDescription(pitchChordNames.join(' '));
         setChordNames(pitchChordNames);
+    };
+
+    const handleKeyChange = (e) => {
+        const selectedKey = e.target.value;
+        setSelectedKey(selectedKey);
+
+        redraw(selectedKey, chordDescription);
+    };
+
+    const handleInputChange = (e) => {
+        const chordDescription = e.target.value;
+        setChordDescription(chordDescription);
+
+        redraw(selectedKey, chordDescription);
     };
 
     return (
