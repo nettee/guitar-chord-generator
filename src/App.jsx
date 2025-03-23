@@ -26,7 +26,7 @@ const App = () => {
 
         const romanChordNames = chordDescription
             .trim()
-            .split(' ')
+            .split(/\s+/)
             .map(roman => roman.trim())
             .filter(roman => roman !== '');
         const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
