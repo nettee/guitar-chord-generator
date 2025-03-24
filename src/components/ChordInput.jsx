@@ -15,6 +15,17 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
         { value: 'E', label: 'E大调' }
     ];
     
+    // Define available chord presets
+    const availableChordPresets = [
+        { value: '1 6 4 5', label: '1645' },
+        { value: '1 6 2 5', label: '1625' },
+        { value: '1 5 6 3 4 1 2 5', label: '15634125 (卡农)' },
+        { value: '4 5 3 6 2 5 1', label: '4536251' },
+        { value: '1 5 6 4', label: '1564' },
+        { value: '6 4 1 5', label: '6415' },
+        // 可以在这里添加更多和弦预设
+    ];
+    
     const redraw = (selectedKey, chordDescription) => {
         if (!chordDescription.trim()) {
             setPitchChordDescription('');
@@ -52,30 +63,45 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
 
     return (
         <div className="input-container">
-            <div className="key-selector">
-                {availableKeys.map(key => (
-                    <div className="key-option" key={key.value}>
-                        <input 
-                            type="radio" 
-                            id={`key-${key.value.toLowerCase()}`} 
-                            name="key" 
-                            value={key.value} 
-                            checked={selectedKey === key.value} 
-                            onChange={handleKeyChange} 
-                        />
-                        <label htmlFor={`key-${key.value.toLowerCase()}`}>{key.label}</label>
-                    </div>
-                ))}
+            <div className="chord-input-line-1">
+                <div className="key-selector">
+                    <select 
+                        value={selectedKey} 
+                        onChange={handleKeyChange}
+                    >
+                        {availableKeys.map(key => (
+                            <option key={key.value} value={key.value}>
+                                {key.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className='chord-preset-selector'>
+                    <select 
+                        // 和弦预设直接更新 chordDescription
+                        value={chordDescription} 
+                        onChange={handleInputChange}
+                    >
+                        {availableChordPresets.map(preset => (
+                            <option key={preset.value} value={preset.value}>
+                                {preset.label}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
-            <div className="chord-input">
-                <textarea 
-                    value={chordDescription} 
-                    onChange={handleInputChange}
-                />
+            <div className='chord-input-line-2'>
+                <div className="chord-description-input">
+                    <textarea 
+                        value={chordDescription} 
+                        onChange={handleInputChange}
+                    />
+                </div>
+            </div>
+            <div className="chord-description-output">
                 <textarea 
                     value={pitchChordDescription} 
                     readOnly
-                    style={{ backgroundColor: '#f0f0f0' }}
                 />
             </div>
         </div>
