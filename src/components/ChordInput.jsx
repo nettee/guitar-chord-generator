@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { roman_to_pitch } from '../degree.js';
 
-const ChordInput = ({ onPitchChordDescriptionChange }) => {
+const ChordInput = ({ onChordNamesChange }) => {
     const [selectedKey, setSelectedKey] = useState('C');
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
-    const [pitchChordDescription, setPitchChordDescription] = useState('F G Em Am Dm G C');
     
     // Define available keys
     const availableKeys = [
@@ -28,8 +27,7 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
     
     const redraw = (selectedKey, chordDescription) => {
         if (!chordDescription.trim()) {
-            setPitchChordDescription('');
-            onPitchChordDescriptionChange('');
+            onChordNamesChange([]);
             return;
         }
 
@@ -39,14 +37,12 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
             .map(roman => roman.trim())
             .filter(roman => roman !== '');
         const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
-        const newPitchChordDescription = pitchChordNames.join(' ');
-        setPitchChordDescription(newPitchChordDescription);
-        onPitchChordDescriptionChange(newPitchChordDescription);
+        onChordNamesChange(pitchChordNames);
     };
 
     useEffect(() => {
-        // Initial call to parent with default value
-        onPitchChordDescriptionChange(pitchChordDescription);
+        // Initial call to parent with default chord names array
+        redraw(selectedKey, chordDescription);
     }, []);
 
     const handleKeyChange = (e) => {
@@ -79,6 +75,7 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
                 <div className='chord-preset-selector'>
                     <select 
                         // 和弦预设直接更新 chordDescription
+                        // TODO 这里有问题，修改了 chordDescription 后，会影响 preset 的显示
                         value={chordDescription} 
                         onChange={handleInputChange}
                     >
@@ -97,12 +94,6 @@ const ChordInput = ({ onPitchChordDescriptionChange }) => {
                         onChange={handleInputChange}
                     />
                 </div>
-            </div>
-            <div className="chord-description-output">
-                <textarea 
-                    value={pitchChordDescription} 
-                    readOnly
-                />
             </div>
         </div>
     );
