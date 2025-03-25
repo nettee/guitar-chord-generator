@@ -3,3 +3,6 @@
 node_modules/
 
 dist/
+
+# 忽略生成的 CSS 文件
+/src/css/
