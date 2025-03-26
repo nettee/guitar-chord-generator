@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { roman_to_pitch } from '../degree.js';
+import { Textarea } from "./ui/textarea";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+
 
 const ChordInput = ({ onChordNamesChange }) => {
     const [selectedKey, setSelectedKey] = useState('C');
@@ -45,10 +48,9 @@ const ChordInput = ({ onChordNamesChange }) => {
         redraw(selectedKey, chordDescription);
     }, []);
 
-    const handleKeyChange = (e) => {
-        const newSelectedKey = e.target.value;
-        setSelectedKey(newSelectedKey);
-        redraw(newSelectedKey, chordDescription);
+    const handleKeyChange = (key) => {
+        setSelectedKey(key);
+        redraw(key, chordDescription);
     };
 
     const handleInputChange = (e) => {
@@ -60,36 +62,27 @@ const ChordInput = ({ onChordNamesChange }) => {
     return (
         <div className="input-container">
             <div className="chord-input-line-1">
-                <div className="key-selector">
-                    <select 
-                        value={selectedKey} 
-                        onChange={handleKeyChange}
-                    >
-                        {availableKeys.map(key => (
-                            <option key={key.value} value={key.value}>
-                                {key.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='chord-preset-selector'>
-                    <select 
-                        // 和弦预设直接更新 chordDescription
-                        // TODO 这里有问题，修改了 chordDescription 后，会影响 preset 的显示
-                        value={chordDescription} 
-                        onChange={handleInputChange}
-                    >
-                        {availableChordPresets.map(preset => (
-                            <option key={preset.value} value={preset.value}>
-                                {preset.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <Select 
+                    value={selectedKey}
+                    onValueChange={handleKeyChange}
+                >
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="选择调式" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            {availableKeys.map(key => (
+                                <SelectItem key={key.value} value={key.value}>
+                                    {key.label}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
             </div>
             <div className='chord-input-line-2'>
                 <div className="chord-description-input">
-                    <textarea 
+                    <Textarea 
                         value={chordDescription} 
                         onChange={handleInputChange}
                     />

@@ -1,11 +1,12 @@
 import React from 'react';
 import Chord from './Chord.jsx';
+import { Textarea } from './ui/textarea.jsx';
 
 const ChordOutput = ({ chordNames }) => {
     return (
         <div className='chord-output'>
             <div className="chord-description-output">
-                <textarea 
+                <Textarea 
                     value={chordNames.join(' ')}
                     readOnly
                 />
