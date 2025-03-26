@@ -1,6 +1,6 @@
 import React from 'react';
 import Chord from './Chord.jsx';
-import { Textarea } from './ui/textarea.jsx';
+import { Textarea } from '@/components/ui/textarea';
 
 const ChordOutput = ({ chordNames }) => {
     return (
