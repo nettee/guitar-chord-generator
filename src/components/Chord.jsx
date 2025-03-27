@@ -47,9 +47,9 @@ const Chord = ({ name }) => {
   const chordSvgId = `chord-svg-${generateRandomId()}`;
 
   return (
-    <div className="chord">
-        <div id={chordSvgId} className="chord-svg" ref={chordRef}></div>
-        <div className="chord-caption">{name}</div>
+    <div className="flex flex-col gap-0 items-center">
+        <div id={chordSvgId} className="w-[100px] h-[120px] flex justify-center items-center" ref={chordRef}></div>
+        <div className="font-sans text-sm text-gray-500 text-center mt-auto">{name}</div>
     </div>
   );
 };

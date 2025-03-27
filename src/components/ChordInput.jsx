@@ -60,13 +60,13 @@ const ChordInput = ({ onChordNamesChange }) => {
     };
 
     return (
-        <div className="input-container">
-            <div className="chord-input-line-1">
+        <div className="m-5 flex flex-col gap-4 items-center">
+            <div className="w-full flex flex-row gap-2">
                 <Select 
                     value={selectedKey}
                     onValueChange={handleKeyChange}
                 >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-32">
                         <SelectValue placeholder="选择调式" />
                     </SelectTrigger>
                     <SelectContent>
@@ -80,9 +80,10 @@ const ChordInput = ({ onChordNamesChange }) => {
                     </SelectContent>
                 </Select>
             </div>
-            <div className='chord-input-line-2'>
-                <div className="chord-description-input">
-                    <Textarea 
+            <div className="w-full flex flex-row gap-2">
+                <div className="w-full h-full flex justify-center items-center">
+                    <Textarea
+                        className="p-2 text-base w-full h-auto min-h-12"
                         value={chordDescription} 
                         onChange={handleInputChange}
                     />
