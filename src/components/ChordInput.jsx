@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { roman_to_pitch } from '../degree.js';
+import { roman_to_pitch } from '@/degree.js';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

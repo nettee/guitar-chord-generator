@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import ChordOutput from './components/ChordOutput.jsx';
-import ChordInput from './components/ChordInput.jsx';
-import { Button } from './components/ui/button.jsx';
+import ChordOutput from '@/components/ChordOutput.jsx';
+import ChordInput from '@/components/ChordInput.jsx';
 
 const App = () => {
     const [chordNames, setChordNames] = useState(['F', 'G', 'Em', 'Am', 'Dm', 'G', 'C']);
