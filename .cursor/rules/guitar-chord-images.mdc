@@ -1,0 +1,35 @@
+---
+description: This rule describes the overview information of this project, and is helpful for writing codes.
+globs: 
+alwaysApply: false
+---
+# 项目说明
+
+## 主要功能
+
+该项目是一个吉他和弦图生成器。
+
+## 技术选型
+
+该项目是一个纯前端项目，形态为一个 Web 页面。
+
+- 使用 JavaScript (ES6) 语言
+- 使用 React + TailWind CSS + Shadcn UI 构建用户界面
+- 使用 Vite 作为构建工具，以支持快速开发和热更新
+- 使用 Jest 进行单元测试
+
+## 关键文件说明
+
+- **src/**: 源代码目录
+  - [App.jsx](mdc:src/App.jsx): React 应用入口
+  - **components/**: React 组件目录
+    - [Chord.jsx](mdc:src/components/Chord.jsx): 渲染和弦图的组件。
+  - **scss/**: 样式文件目录
+    - [styles.scss](mdc:src/scss/styles.scss): 项目的样式文件入口
+  - **data/**: 数据文件目录
+    - [chords.js](mdc:src/data/chords.js): 包含和弦的按法数据
+
+## 其他信息
+
+- 项目支持中文，注释和文档均使用中文。
+- 代码结构清晰，易于维护和扩展。
