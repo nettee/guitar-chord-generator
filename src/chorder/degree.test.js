@@ -1,4 +1,4 @@
-import { roman_to_pitch } from './degree';
+import { roman_to_pitch } from './degree.js';
 
 describe('roman_to_pitch', () => {
   test('converts 1st degree to root chord in C major', () => {

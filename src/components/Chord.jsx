@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ChordBox } from '@/chordbox.js';
+import { ChordBox } from '@/chorder/chordbox.js';
 import { chordData } from '@/data/chords.js';
 
 const generateRandomId = () => {
