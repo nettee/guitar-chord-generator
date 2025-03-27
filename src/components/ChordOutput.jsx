@@ -1,8 +1,11 @@
 import React from 'react';
 import Chord from '@/components/Chord.jsx';
 import { Textarea } from '@/components/ui/textarea';
+import { useChordContext } from '@/contexts/ChordContext.jsx';
 
-const ChordOutput = ({ chordNames }) => {
+const ChordOutput = () => {
+    const { chordNames } = useChordContext();
+    
     return (
         <div>
             <div className="w-full h-full flex justify-center items-center">

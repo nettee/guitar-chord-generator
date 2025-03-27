@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { roman_to_pitch } from '@/chorder/degree.js';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useChordContext } from '@/contexts/ChordContext.jsx';
 
-
-const ChordInput = ({ onChordNamesChange }) => {
+const ChordInput = () => {
+    const { setChordNames } = useChordContext();
     const [selectedKey, setSelectedKey] = useState('C');
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
     
@@ -28,9 +29,9 @@ const ChordInput = ({ onChordNamesChange }) => {
         // 可以在这里添加更多和弦预设
     ];
     
-    const redraw = (selectedKey, chordDescription) => {
+    const updateChordNames = (selectedKey, chordDescription) => {
         if (!chordDescription.trim()) {
-            onChordNamesChange([]);
+            setChordNames([]);
             return;
         }
 
@@ -40,23 +41,23 @@ const ChordInput = ({ onChordNamesChange }) => {
             .map(roman => roman.trim())
             .filter(roman => roman !== '');
         const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
-        onChordNamesChange(pitchChordNames);
+        setChordNames(pitchChordNames);
     };
 
     useEffect(() => {
-        // Initial call to parent with default chord names array
-        redraw(selectedKey, chordDescription);
+        // Initial call to update context with default chord names array
+        updateChordNames(selectedKey, chordDescription);
     }, []);
 
     const handleKeyChange = (key) => {
         setSelectedKey(key);
-        redraw(key, chordDescription);
+        updateChordNames(key, chordDescription);
     };
 
     const handleInputChange = (e) => {
         const newChordDescription = e.target.value;
         setChordDescription(newChordDescription);
-        redraw(selectedKey, newChordDescription);
+        updateChordNames(selectedKey, newChordDescription);
     };
 
     return (
