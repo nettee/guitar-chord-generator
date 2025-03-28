@@ -4,10 +4,36 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useChordContext } from '@/contexts/ChordContext.jsx';
 
+const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
+    return (
+        <div className="flex w-fit rounded-md bg-gray-200 p-1 dark:bg-[#222]">
+            <button 
+                className="relative w-fit px-4 py-2 text-sm font-semibold capitalize text-foreground transition-colors"
+                onClick={() => onInputTypeChange('roman')}
+            >
+                <span className="relative z-10">输入级数</span>
+                {inputType === 'roman' && (
+                    <span className="absolute inset-0 z-0 rounded-md bg-background shadow-sm" style={{ transform: 'none', transformOrigin: '50% 50% 0px' }}></span>
+                )}
+            </button>
+            <button 
+                className="relative w-fit px-4 py-2 text-sm font-semibold capitalize text-foreground transition-colors flex items-center justify-center gap-2.5"
+                onClick={() => onInputTypeChange('chord')}
+            >
+                <span className="relative z-10">输入和弦</span>
+                {inputType === 'chord' && (
+                    <span className="absolute inset-0 z-0 rounded-md bg-background shadow-sm" style={{ transform: 'none', transformOrigin: '50% 50% 0px' }}></span>
+                )}
+            </button>
+        </div>
+    );
+};
+
 const ChordInput = () => {
     const { setChordNames } = useChordContext();
     const [selectedKey, setSelectedKey] = useState('C');
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
+    const [inputType, setInputType] = useState('roman'); // 'roman' 为级数输入，'chord' 为和弦输入
     
     // Define available keys
     const availableKeys = [
@@ -35,13 +61,13 @@ const ChordInput = () => {
             return;
         }
 
-        const romanChordNames = chordDescription
-            .trim()
-            .split(/\s+/)
-            .map(roman => roman.trim())
-            .filter(roman => roman !== '');
-        const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
-        setChordNames(pitchChordNames);
+            const romanChordNames = chordDescription
+                .trim()
+                .split(/\s+/)
+                .map(roman => roman.trim())
+                .filter(roman => roman !== '');
+            const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
+            setChordNames(pitchChordNames);
     };
 
     useEffect(() => {
@@ -81,13 +107,19 @@ const ChordInput = () => {
                     </SelectContent>
                 </Select>
             </div>
+            <div className='w-full flex flex-row gap-2'>
+                <InputTypeToggle 
+                    inputType={inputType} 
+                    onInputTypeChange={setInputType} 
+                />
+            </div>
             <div className="w-full flex flex-row gap-2">
                 <div className="w-full h-full flex justify-center items-center">
                     <Textarea
                         className="p-2 text-base w-full h-auto min-h-12"
                         value={chordDescription} 
                         onChange={handleInputChange}
-                    />
+                                            />
                 </div>
             </div>
         </div>
