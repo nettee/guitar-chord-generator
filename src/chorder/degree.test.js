@@ -1,4 +1,4 @@
-import { roman_to_pitch } from './degree.js';
+import { roman_to_pitch, pitch_to_roman } from './degree.js';
 
 describe('roman_to_pitch', () => {
   test('converts 1st degree to root chord in C major', () => {
@@ -53,5 +53,73 @@ describe('roman_to_pitch', () => {
     expect(() => {
       roman_to_pitch('H', '1');
     }).toThrow('未知的调式: H');
+  });
+});
+
+describe('pitch_to_roman', () => {
+  test('converts root chord to 1st degree in C major', () => {
+    expect(pitch_to_roman('C', 'C')).toBe('1');
+  });
+
+  test('converts minor chord to 2nd degree in C major', () => {
+    expect(pitch_to_roman('C', 'Dm')).toBe('2m');
+  });
+
+  test('converts minor chord to 3rd degree in C major', () => {
+    expect(pitch_to_roman('C', 'Em')).toBe('3m');
+  });
+
+  test('converts 4th degree chord in C major', () => {
+    expect(pitch_to_roman('C', 'F')).toBe('4');
+  });
+
+  test('converts 5th degree chord in C major', () => {
+    expect(pitch_to_roman('C', 'G')).toBe('5');
+  });
+
+  test('converts minor chord to 6th degree in C major', () => {
+    expect(pitch_to_roman('C', 'Am')).toBe('6m');
+  });
+
+  test('converts 7th degree chord in C major', () => {
+    expect(pitch_to_roman('C', 'B')).toBe('7');
+  });
+
+  test('handles chord types correctly', () => {
+    expect(pitch_to_roman('C', 'Em7')).toBe('3m7');
+    expect(pitch_to_roman('C', 'Fmaj7')).toBe('4maj7');
+    expect(pitch_to_roman('C', 'G7')).toBe('57');
+    expect(pitch_to_roman('C', 'Dm7b5')).toBe('2m7b5');
+  });
+
+  test('works with different keys', () => {
+    expect(pitch_to_roman('G', 'G')).toBe('1');
+    expect(pitch_to_roman('G', 'Am')).toBe('2m');
+    expect(pitch_to_roman('G', 'Cmaj7')).toBe('4maj7');
+    expect(pitch_to_roman('G', 'Dsus4')).toBe('5sus4');
+  });
+
+  test('works with sharp keys', () => {
+    expect(pitch_to_roman('F#', 'F#')).toBe('1');
+    expect(pitch_to_roman('F#', 'B')).toBe('4');
+    expect(pitch_to_roman('F#', 'C#')).toBe('5');
+  });
+
+  test('throws error for invalid key', () => {
+    expect(() => {
+      pitch_to_roman('H', 'C');
+    }).toThrow('未知的调式: H');
+  });
+
+  test('throws error for invalid root pitch', () => {
+    expect(() => {
+      pitch_to_roman('C', 'H');
+    }).toThrow('未知的根音: H');
+  });
+
+  test('throws error for non-diatonic chord', () => {
+    expect(() => {
+      pitch_to_roman('C', 'C#');
+    }).toThrow('无法确定和弦的度数');
   });
 }); 
