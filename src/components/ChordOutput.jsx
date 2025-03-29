@@ -13,6 +13,7 @@ const ChordOutput = () => {
                     className="p-2 text-base w-full h-auto min-h-12 bg-gray-200"
                     value={chordNames.join(' ')}
                     readOnly
+                    style={{ display: 'none' }}
                 />
             </div>
             <div className="flex flex-row flex-wrap gap-2 justify-center items-start">

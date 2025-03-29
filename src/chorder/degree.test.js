@@ -49,10 +49,12 @@ describe('roman_to_pitch', () => {
     expect(roman_to_pitch('F#', '5')).toBe('C#');
   });
 
-  test('throws error for invalid key', () => {
-    expect(() => {
-      roman_to_pitch('H', '1');
-    }).toThrow('未知的调式: H');
+  test('returns original input for invalid key', () => {
+    expect(roman_to_pitch('H', '1')).toBe('1');
+  });
+
+  test('already pitch', () => {
+    expect(roman_to_pitch('G', 'F')).toBe('F');
   });
 });
 
@@ -105,21 +107,15 @@ describe('pitch_to_roman', () => {
     expect(pitch_to_roman('F#', 'C#')).toBe('5');
   });
 
-  test('throws error for invalid key', () => {
-    expect(() => {
-      pitch_to_roman('H', 'C');
-    }).toThrow('未知的调式: H');
+  test('returns original input for invalid key', () => {
+    expect(pitch_to_roman('H', 'C')).toBe('C');
   });
 
-  test('throws error for invalid root pitch', () => {
-    expect(() => {
-      pitch_to_roman('C', 'H');
-    }).toThrow('未知的根音: H');
+  test('returns original input for invalid root pitch', () => {
+    expect(pitch_to_roman('C', 'H')).toBe('H');
   });
 
-  test('throws error for non-diatonic chord', () => {
-    expect(() => {
-      pitch_to_roman('C', 'C#');
-    }).toThrow('无法确定和弦的度数');
+  test('returns original input for non-diatonic chord', () => {
+    expect(pitch_to_roman('C', 'C#')).toBe('C#');
   });
-}); 
+});
