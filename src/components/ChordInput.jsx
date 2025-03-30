@@ -3,7 +3,8 @@ import { roman_to_pitch, pitch_to_roman } from '@/chorder/degree.js';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useChordContext } from '@/contexts/ChordContext.jsx';
-
+import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
 const availableKeys = [
     { value: 'C', label: 'C大调' },
     { value: 'G', label: 'G大调' },
@@ -29,7 +30,7 @@ const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
             {inputTypeOptions.map((option) => (
                 <button 
                     key={option.value}
-                    className="relative w-fit px-4 py-2 text-sm font-semibold capitalize text-foreground transition-colors"
+                    className="relative w-fit px-4 py-2 text-sm font-semibold text-foreground transition-colors"
                     onClick={() => onInputTypeChange(option.value)}
                 >
                     <span className="relative z-10">{option.label}</span>
@@ -69,6 +70,7 @@ const ChordInput = () => {
     const [inputType, setInputType] = useState(InputTypeEnum.ROMAN);
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
     const { setChordNames } = useChordContext();
+    const { toast } = useToast();
     
     // Define available chord presets
     const availableChordPresets = [
@@ -140,6 +142,13 @@ const ChordInput = () => {
         updateChordNames(selectedKey, inputType, description);
     };
 
+    const handleCopyChordDescription = () => {
+        navigator.clipboard.writeText(chordDescription);
+        toast({
+            description: '已复制到剪贴板',
+        });
+    };
+
     return (
         <div className="m-5 flex flex-col gap-4 items-center">
             <div className="w-full flex flex-row gap-2">
@@ -148,15 +157,34 @@ const ChordInput = () => {
                     onKeyChange={handleKeyChange} 
                 />
             </div>
-            <div className='w-full flex flex-row gap-2'>
-                <InputTypeToggle 
-                    inputType={inputType} 
-                    onInputTypeChange={handleInputTypeChange} 
-                />
+            <div className='w-full flex flex-row gap-2 items-center'>
+                <div className="w-1/2 flex flex-row gap-2">
+                    <InputTypeToggle 
+                        inputType={inputType} 
+                        onInputTypeChange={handleInputTypeChange} 
+                    />
+                </div>
+                <div className="w-1/2 ml-auto flex flex-row-reverse gap-2">
+                    <Button
+                        variant="destructive"
+                        className=""
+                        onClick={() => handleChordDescriptionChange('')}
+                    >
+                        清空
+                    </Button>
+                    <Button
+                        variant="outline"
+                        className=""
+                        onClick={handleCopyChordDescription}
+                    >
+                        复制
+                    </Button>
+                </div>
             </div>
             <div className="w-full flex justify-center items-center">
                 <Textarea
                     className="p-2 text-base w-full h-auto min-h-28"
+                    placeholder="请输入和弦，如：4 5 3 6 2 5 1"
                     value={chordDescription} 
                     onChange={(e) => handleChordDescriptionChange(e.target.value)}
                 />

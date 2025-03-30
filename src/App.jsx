@@ -2,6 +2,7 @@ import React from 'react';
 import ChordOutput from '@/components/ChordOutput.jsx';
 import ChordInput from '@/components/ChordInput.jsx';
 import { ChordProvider } from '@/contexts/ChordContext.jsx';
+import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {
     return (
@@ -13,6 +14,7 @@ const App = () => {
                     <ChordOutput />
                 </div>
             </div>
+            <Toaster />
         </ChordProvider>
     );
 };
