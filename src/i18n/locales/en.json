@@ -1,0 +1,37 @@
+{
+  "appTitle": "Guitar Chord Generator",
+  "keySelect": {
+    "placeholder": "Select Key",
+    "C": "C Major",
+    "G": "G Major",
+    "D": "D Major",
+    "A": "A Major",
+    "E": "E Major"
+  },
+  "inputType": {
+    "roman": "Roman Numerals",
+    "pitch": "Pitch Names"
+  },
+  "buttons": {
+    "clear": "Clear",
+    "copy": "Copy",
+    "copySuccess": "Copied to clipboard"
+  },
+  "chordPresets": {
+    "placeholder": "Insert Chord Preset",
+    "1645": "1645",
+    "1625": "1625",
+    "canon": "15634125 (Canon)",
+    "4536251": "4536251",
+    "1564": "1564",
+    "6415": "6415"
+  },
+  "textarea": {
+    "placeholder": "Enter chords, e.g.: 4 5 3 6 2 5 1"
+  },
+  "language": "Language",
+  "switchLang": {
+    "en": "English",
+    "zh": "中文"
+  }
+} 

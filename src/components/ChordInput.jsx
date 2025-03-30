@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { roman_to_pitch, pitch_to_roman } from '@/chorder/degree.js';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -6,36 +7,19 @@ import { useChordContext } from '@/contexts/ChordContext.jsx';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 
-const availableKeys = [
-    { value: 'C', label: 'C大调' },
-    { value: 'G', label: 'G大调' },
-    { value: 'D', label: 'D大调' },
-    { value: 'A', label: 'A大调' },
-    { value: 'E', label: 'E大调' }
-];
-
 const InputTypeEnum = {
     ROMAN: 'roman',
     PITCH: 'pitch'
 };
 
-const inputTypeOptions = [
-    { value: InputTypeEnum.ROMAN, label: '级数形式' },
-    { value: InputTypeEnum.PITCH, label: '音名形式' }
-];
-
-const availableChordPresets = [
-    { value: '1 6 4 5', label: '1645' },
-    { value: '1 6 2 5', label: '1625' },
-    { value: '1 5 6 3 4 1 2 5', label: '15634125 (卡农)' },
-    { value: '4 5 3 6 2 5 1', label: '4536251' },
-    { value: '1 5 6 4', label: '1564' },
-    { value: '6 4 1 5', label: '6415' },
-    // 可以在这里添加更多和弦预设
-];
-
-// 参考：https://github.com/aymanch-03/shadcn-pricing-page?tab=readme-ov-file
 const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
+    const { t } = useTranslation();
+    
+    const inputTypeOptions = [
+        { value: InputTypeEnum.ROMAN, label: t('inputType.roman') },
+        { value: InputTypeEnum.PITCH, label: t('inputType.pitch') }
+    ];
+    
     return (
         <div className="flex w-fit rounded-md bg-gray-200 p-1 dark:bg-[#222]">
             {inputTypeOptions.map((option) => (
@@ -55,13 +39,23 @@ const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
 };
 
 const KeySelect = ({ selectedKey, onKeyChange }) => {
+    const { t } = useTranslation();
+    
+    const availableKeys = [
+        { value: 'C', label: t('keySelect.C') },
+        { value: 'G', label: t('keySelect.G') },
+        { value: 'D', label: t('keySelect.D') },
+        { value: 'A', label: t('keySelect.A') },
+        { value: 'E', label: t('keySelect.E') }
+    ];
+    
     return (
         <Select 
             value={selectedKey}
             onValueChange={onKeyChange}
         >
             <SelectTrigger className="w-32">
-                <SelectValue placeholder="选择调式" />
+                <SelectValue placeholder={t('keySelect.placeholder')} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
@@ -77,13 +71,24 @@ const KeySelect = ({ selectedKey, onKeyChange }) => {
 };
 
 const ChordPresetSelect = ({ onPresetSelected }) => {
+    const { t } = useTranslation();
+    
+    const availableChordPresets = [
+        { value: '1 6 4 5', label: t('chordPresets.1645') },
+        { value: '1 6 2 5', label: t('chordPresets.1625') },
+        { value: '1 5 6 3 4 1 2 5', label: t('chordPresets.canon') },
+        { value: '4 5 3 6 2 5 1', label: t('chordPresets.4536251') },
+        { value: '1 5 6 4', label: t('chordPresets.1564') },
+        { value: '6 4 1 5', label: t('chordPresets.6415') },
+    ];
+    
     return (
         <Select
             value={''}
             onValueChange={onPresetSelected}
         >
             <SelectTrigger className="w-32">
-                <SelectValue placeholder="插入和弦预设" />
+                <SelectValue placeholder={t('chordPresets.placeholder')} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
@@ -99,6 +104,7 @@ const ChordPresetSelect = ({ onPresetSelected }) => {
 };
 
 const ChordInput = () => {
+    const { t } = useTranslation();
     const [selectedKey, setSelectedKey] = useState('C');
     const [inputType, setInputType] = useState(InputTypeEnum.ROMAN);
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
@@ -173,7 +179,7 @@ const ChordInput = () => {
     const handleCopyChordDescription = () => {
         navigator.clipboard.writeText(chordDescription);
         toast({
-            description: '已复制到剪贴板',
+            description: t('buttons.copySuccess'),
         });
     };
 
@@ -198,14 +204,14 @@ const ChordInput = () => {
                         className=""
                         onClick={() => handleChordDescriptionChange('')}
                     >
-                        清空
+                        {t('buttons.clear')}
                     </Button>
                     <Button
                         variant="outline"
                         className=""
                         onClick={handleCopyChordDescription}
                     >
-                        复制
+                        {t('buttons.copy')}
                     </Button>
                     <ChordPresetSelect 
                         onPresetSelected={handlePresetSelected}
@@ -215,7 +221,7 @@ const ChordInput = () => {
             <div className="w-full flex justify-center items-center">
                 <Textarea
                     className="p-2 text-base w-full h-auto min-h-28"
-                    placeholder="请输入和弦，如：4 5 3 6 2 5 1"
+                    placeholder={t('textarea.placeholder')}
                     value={chordDescription} 
                     onChange={(e) => handleChordDescriptionChange(e.target.value)}
                 />

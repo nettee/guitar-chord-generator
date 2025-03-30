@@ -1,0 +1,37 @@
+{
+  "appTitle": "吉他和弦生成器",
+  "keySelect": {
+    "placeholder": "选择调式",
+    "C": "C大调",
+    "G": "G大调",
+    "D": "D大调",
+    "A": "A大调",
+    "E": "E大调"
+  },
+  "inputType": {
+    "roman": "级数形式",
+    "pitch": "音名形式"
+  },
+  "buttons": {
+    "clear": "清空",
+    "copy": "复制",
+    "copySuccess": "已复制到剪贴板"
+  },
+  "chordPresets": {
+    "placeholder": "插入和弦预设",
+    "1645": "1645",
+    "1625": "1625",
+    "canon": "15634125 (卡农)",
+    "4536251": "4536251",
+    "1564": "1564",
+    "6415": "6415"
+  },
+  "textarea": {
+    "placeholder": "请输入和弦，如：4 5 3 6 2 5 1"
+  },
+  "language": "语言",
+  "switchLang": {
+    "en": "English",
+    "zh": "中文"
+  }
+} 
