@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useChordContext } from '@/contexts/ChordContext.jsx';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
+
 const availableKeys = [
     { value: 'C', label: 'C大调' },
     { value: 'G', label: 'G大调' },
@@ -21,6 +22,16 @@ const InputTypeEnum = {
 const inputTypeOptions = [
     { value: InputTypeEnum.ROMAN, label: '级数形式' },
     { value: InputTypeEnum.PITCH, label: '音名形式' }
+];
+
+const availableChordPresets = [
+    { value: '1 6 4 5', label: '1645' },
+    { value: '1 6 2 5', label: '1625' },
+    { value: '1 5 6 3 4 1 2 5', label: '15634125 (卡农)' },
+    { value: '4 5 3 6 2 5 1', label: '4536251' },
+    { value: '1 5 6 4', label: '1564' },
+    { value: '6 4 1 5', label: '6415' },
+    // 可以在这里添加更多和弦预设
 ];
 
 // 参考：https://github.com/aymanch-03/shadcn-pricing-page?tab=readme-ov-file
@@ -65,23 +76,34 @@ const KeySelect = ({ selectedKey, onKeyChange }) => {
     );
 };
 
+const ChordPresetSelect = ({ onPresetSelected }) => {
+    return (
+        <Select
+            value={''}
+            onValueChange={onPresetSelected}
+        >
+            <SelectTrigger className="w-32">
+                <SelectValue placeholder="插入和弦预设" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                    {availableChordPresets.map(preset => (
+                        <SelectItem key={preset.value} value={preset.value}>
+                            {preset.label}
+                        </SelectItem>
+                    ))}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+    );
+};
+
 const ChordInput = () => {
     const [selectedKey, setSelectedKey] = useState('C');
     const [inputType, setInputType] = useState(InputTypeEnum.ROMAN);
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
     const { setChordNames } = useChordContext();
     const { toast } = useToast();
-    
-    // Define available chord presets
-    const availableChordPresets = [
-        { value: '1 6 4 5', label: '1645' },
-        { value: '1 6 2 5', label: '1625' },
-        { value: '1 5 6 3 4 1 2 5', label: '15634125 (卡农)' },
-        { value: '4 5 3 6 2 5 1', label: '4536251' },
-        { value: '1 5 6 4', label: '1564' },
-        { value: '6 4 1 5', label: '6415' },
-        // 可以在这里添加更多和弦预设
-    ];
     
     const updateChordNames = (selectedKey, inputType, chordDescription) => {
         if (!chordDescription.trim()) {
@@ -142,6 +164,12 @@ const ChordInput = () => {
         updateChordNames(selectedKey, inputType, description);
     };
 
+    const handlePresetSelected = (preset) => {
+        const newChordDescription = chordDescription + ' ' + preset;
+        setChordDescription(newChordDescription);
+        updateChordNames(selectedKey, inputType, newChordDescription);
+    };
+
     const handleCopyChordDescription = () => {
         navigator.clipboard.writeText(chordDescription);
         toast({
@@ -164,7 +192,7 @@ const ChordInput = () => {
                         onInputTypeChange={handleInputTypeChange} 
                     />
                 </div>
-                <div className="w-1/2 ml-auto flex flex-row-reverse gap-2">
+                <div className="w-1/2 ml-auto flex flex-row-reverse gap-2 items-center">
                     <Button
                         variant="destructive"
                         className=""
@@ -179,6 +207,9 @@ const ChordInput = () => {
                     >
                         复制
                     </Button>
+                    <ChordPresetSelect 
+                        onPresetSelected={handlePresetSelected}
+                    />
                 </div>
             </div>
             <div className="w-full flex justify-center items-center">
