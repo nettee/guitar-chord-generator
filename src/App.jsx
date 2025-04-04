@@ -11,7 +11,7 @@ const App = () => {
     
     return (
         <ChordProvider>
-            <div className="p-4 max-w-4xl mx-auto">
+            <div className="m-5 p-4 max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold text-center">{t('appTitle')}</h1>
                     <LanguageSwitcher />

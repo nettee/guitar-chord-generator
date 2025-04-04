@@ -184,7 +184,7 @@ const ChordInput = () => {
     };
 
     return (
-        <div className="m-5 flex flex-col gap-4 items-center">
+        <div className="flex flex-col gap-4 items-center">
             <div className="w-full flex flex-row gap-2">
                 <KeySelect 
                     selectedKey={selectedKey} 
