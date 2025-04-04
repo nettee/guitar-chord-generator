@@ -31,9 +31,15 @@ class DegreeTranslator {
         // 获取和弦类型（去掉第一个字符后的所有内容）
         let chordType = roman.substring(1);
         
-        // 特殊情况处理：当开启小和弦简写时，2, 3, 6 单独出现时为小和弦
-        if (chordType === '' && this.useMinorShorthand && (degree === 2 || degree === 3 || degree === 6)) {
-            chordType = 'm';
+        // 特殊情况处理：
+        // 当开启小和弦简写时，2, 3, 6 单独出现时为小和弦
+        // 当开启小和弦简写时，7 单独出现时为减和弦
+        if (chordType === '' && this.useMinorShorthand) {
+            if (degree === 2 || degree === 3 || degree === 6) {
+                chordType = 'm';
+            } else if (degree === 7) {
+                chordType = 'dim';
+            }
         } else if (chordType === 'M') {
             // M 表示大和弦，不添加任何后缀
             chordType = '';
@@ -106,8 +112,15 @@ class DegreeTranslator {
             // 当启用小和弦简写时：
             // 1. 如果是2/3/6度的小和弦(m)，转换为简写形式(无后缀)
             // 2. 如果是2/3/6度的大和弦(无后缀)，需要明确标记为大和弦(M)
+            // 3. 如果是7度的减和弦(dim)，转换为简写形式(无后缀)
             if (degree === 2 || degree === 3 || degree === 6) {
                 if (chordType === 'm') {
+                    chordType = '';
+                } else if (chordType === '') {
+                    chordType = 'M';
+                }
+            } else if (degree === 7) {
+                if (chordType === 'dim') {
                     chordType = '';
                 } else if (chordType === '') {
                     chordType = 'M';

@@ -25,8 +25,12 @@ describe('roman_to_pitch', () => {
     expect(roman_to_pitch('C', '6')).toBe('Am');
   });
 
-  test('converts 7th degree in C major', () => {
-    expect(roman_to_pitch('C', '7')).toBe('B');
+  test('converts 7th degree to diminished chord in C major with useMinorShorthand=true', () => {
+    expect(roman_to_pitch('C', '7')).toBe('Bdim');
+  });
+
+  test('converts 7th degree in C major with useMinorShorthand=false', () => {
+    expect(roman_to_pitch('C', '7', false)).toBe('B');
   });
 
   test('handles chord types correctly', () => {
@@ -36,6 +40,8 @@ describe('roman_to_pitch', () => {
     expect(roman_to_pitch('C', '2m7b5')).toBe('Dm7b5');
     expect(roman_to_pitch('C', '1M')).toBe('C');
     expect(roman_to_pitch('C', '6M')).toBe('A');
+    expect(roman_to_pitch('C', '7M')).toBe('B');
+    expect(roman_to_pitch('C', '7dim')).toBe('Bdim');
   });
 
   test('works with different keys', () => {
@@ -102,8 +108,12 @@ describe('pitch_to_roman', () => {
     expect(pitch_to_roman('C', 'Am')).toBe('6');
   });
 
-  test('converts 7th degree chord in C major', () => {
-    expect(pitch_to_roman('C', 'B')).toBe('7');
+  test('converts 7th degree diminished chord to 7 in C major with useMinorShorthand=true', () => {
+    expect(pitch_to_roman('C', 'Bdim')).toBe('7');
+  });
+
+  test('converts 7th degree chord in C major with useMinorShorthand=false', () => {
+    expect(pitch_to_roman('C', 'Bdim', false)).toBe('7dim');
   });
 
   test('handles chord types correctly', () => {
@@ -118,6 +128,7 @@ describe('pitch_to_roman', () => {
     expect(pitch_to_roman('G', 'Am')).toBe('2');
     expect(pitch_to_roman('G', 'Cmaj7')).toBe('4maj7');
     expect(pitch_to_roman('G', 'Dsus4')).toBe('5sus4');
+    expect(pitch_to_roman('G', 'F#dim')).toBe('7');
   });
 
   test('works with sharp keys', () => {
@@ -155,12 +166,15 @@ describe('pitch_to_roman', () => {
     expect(pitch_to_roman('C', 'D', false)).toBe('2');
     expect(pitch_to_roman('C', 'E', false)).toBe('3');
     expect(pitch_to_roman('C', 'A', false)).toBe('6');
+    
+    // Diminished chords should keep 'dim'
+    expect(pitch_to_roman('C', 'Bdim', false)).toBe('7dim');
   });
 });
 
 describe('bidirectional conversion works with useMinorShorthand', () => {
   test('works with useMinorShorthand=true', () => {
-    const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B', 'D', 'E', 'A'];
+    const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bdim', 'D', 'E', 'A', 'B'];
     const key = 'C';
 
     chords.forEach(chord => {
@@ -171,7 +185,7 @@ describe('bidirectional conversion works with useMinorShorthand', () => {
   });
 
   test('works with useMinorShorthand=false', () => {
-    const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B', 'D', 'E', 'A'];
+    const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B', 'D', 'E', 'A', 'Bdim'];
     const key = 'C';
 
     chords.forEach(chord => {
