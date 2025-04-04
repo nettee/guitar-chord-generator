@@ -2,12 +2,15 @@
  * 处理级数和弦与音高和弦之间的转换。
  */
 class DegreeTranslator {
-    constructor() {
+    constructor(useMinorShorthand = true) {
         // 所有音高
         this.pitches = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         
         // 自然大调的音程关系（半音数）
         this.majorScaleIntervals = [0, 2, 4, 5, 7, 9, 11];
+        
+        // 是否使用小和弦简写（2/3/6 表示 Dm/Em/Am）
+        this.useMinorShorthand = useMinorShorthand;
     }
 
     /**
@@ -28,9 +31,12 @@ class DegreeTranslator {
         // 获取和弦类型（去掉第一个字符后的所有内容）
         let chordType = roman.substring(1);
         
-        // 特殊情况处理：2, 3, 6 单独出现时为小和弦
-        if (chordType === '' && (degree === 2 || degree === 3 || degree === 6)) {
+        // 特殊情况处理：当开启小和弦简写时，2, 3, 6 单独出现时为小和弦
+        if (chordType === '' && this.useMinorShorthand && (degree === 2 || degree === 3 || degree === 6)) {
             chordType = 'm';
+        } else if (chordType === 'M') {
+            // M 表示大和弦，不添加任何后缀
+            chordType = '';
         }
         
         // 找到起始音高在pitches中的索引
@@ -95,23 +101,36 @@ class DegreeTranslator {
             throw new Error(`无法确定和弦的度数: ${chord} 在 ${key} 调中`);
         }
         
+        // 根据小和弦简写规则处理和弦类型
+        if (this.useMinorShorthand) {
+            // 当启用小和弦简写时：
+            // 1. 如果是2/3/6度的小和弦(m)，转换为简写形式(无后缀)
+            // 2. 如果是2/3/6度的大和弦(无后缀)，需要明确标记为大和弦(M)
+            if (degree === 2 || degree === 3 || degree === 6) {
+                if (chordType === 'm') {
+                    chordType = '';
+                } else if (chordType === '') {
+                    chordType = 'M';
+                }
+            }
+        }
+        
         // 返回最终的级数和弦
         return degree + chordType;
     }
 }
 
-// 创建单例实例
-const translator = new DegreeTranslator();
-
 /**
  * 将级数和弦转换为音高和弦。
  * @param {string} key - 调式，如 C
  * @param {string} roman - 级数和弦，如 2m7
+ * @param {boolean} useMinorShorthand - 是否使用小和弦简写，默认为true
  * @returns {string} 音高和弦，如 Dm7，如果转换失败则返回原始入参roman
  */
-function roman_to_pitch(key, roman) {
+function roman_to_pitch(key, roman, useMinorShorthand = true) {
     try {
-        return translator.romanToPitch(key, roman);
+        const localTranslator = new DegreeTranslator(useMinorShorthand);
+        return localTranslator.romanToPitch(key, roman);
     } catch (error) {
         return roman;
     }
@@ -121,11 +140,13 @@ function roman_to_pitch(key, roman) {
  * 将音高和弦转换为级数和弦。
  * @param {string} key - 调式，如 C
  * @param {string} chord - 音高和弦，如 Dm7
+ * @param {boolean} useMinorShorthand - 是否使用小和弦简写，默认为true
  * @returns {string} 级数和弦，如 2m7，如果转换失败则返回原始入参chord
  */
-function pitch_to_roman(key, chord) {
+function pitch_to_roman(key, chord, useMinorShorthand = true) {
     try {
-        return translator.pitchToRoman(key, chord);
+        const localTranslator = new DegreeTranslator(useMinorShorthand);
+        return localTranslator.pitchToRoman(key, chord);
     } catch (error) {
         return chord;
     }
