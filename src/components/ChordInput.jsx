@@ -16,8 +16,8 @@ const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
     const { t } = useTranslation();
     
     const inputTypeOptions = [
-        { value: InputTypeEnum.ROMAN, label: t('inputType.roman') },
-        { value: InputTypeEnum.PITCH, label: t('inputType.pitch') }
+        { value: InputTypeEnum.ROMAN, label: t('inputType.byDegree') },
+        { value: InputTypeEnum.PITCH, label: t('inputType.byName') }
     ];
     
     return (

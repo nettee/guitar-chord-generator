@@ -9,8 +9,8 @@
     "E": "E大调"
   },
   "inputType": {
-    "roman": "级数形式",
-    "pitch": "音名形式"
+    "byDegree": "级数形式",
+    "byName": "名称形式"
   },
   "buttons": {
     "clear": "清空",

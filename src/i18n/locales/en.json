@@ -9,8 +9,8 @@
     "E": "E Major"
   },
   "inputType": {
-    "roman": "Roman Numerals",
-    "pitch": "Pitch Names"
+    "byDegree": "By Degrees",
+    "byName": "By Names"
   },
   "buttons": {
     "clear": "Clear",
