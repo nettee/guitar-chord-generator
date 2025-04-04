@@ -1,36 +1,24 @@
 import { roman_to_pitch, pitch_to_roman } from './degree.js';
 
 describe('roman_to_pitch', () => {
-  test('converts 1st degree to root chord in C major', () => {
+  test('C major scale, with shorthand', () => {
     expect(roman_to_pitch('C', '1')).toBe('C');
-  });
-
-  test('converts 2nd degree to minor chord in C major', () => {
     expect(roman_to_pitch('C', '2')).toBe('Dm');
-  });
-
-  test('converts 3rd degree to minor chord in C major', () => {
     expect(roman_to_pitch('C', '3')).toBe('Em');
-  });
-
-  test('converts 4th degree in C major', () => {
     expect(roman_to_pitch('C', '4')).toBe('F');
-  });
-
-  test('converts 5th degree in C major', () => {
     expect(roman_to_pitch('C', '5')).toBe('G');
-  });
-
-  test('converts 6th degree to minor chord in C major', () => {
     expect(roman_to_pitch('C', '6')).toBe('Am');
-  });
-
-  test('converts 7th degree to diminished chord in C major with useMinorShorthand=true', () => {
     expect(roman_to_pitch('C', '7')).toBe('Bdim');
   });
 
-  test('converts 7th degree in C major with useMinorShorthand=false', () => {
-    expect(roman_to_pitch('C', '7', false)).toBe('B');
+  test('C major scale, with no shorthand', () => {
+    expect(roman_to_pitch('C', '1')).toBe('C');
+    expect(roman_to_pitch('C', '2m')).toBe('Dm');
+    expect(roman_to_pitch('C', '3m')).toBe('Em');
+    expect(roman_to_pitch('C', '4')).toBe('F');
+    expect(roman_to_pitch('C', '5')).toBe('G');
+    expect(roman_to_pitch('C', '6m')).toBe('Am');
+    expect(roman_to_pitch('C', '7dim')).toBe('Bdim');
   });
 
   test('handles chord types correctly', () => {
@@ -42,6 +30,32 @@ describe('roman_to_pitch', () => {
     expect(roman_to_pitch('C', '6M')).toBe('A');
     expect(roman_to_pitch('C', '7M')).toBe('B');
     expect(roman_to_pitch('C', '7dim')).toBe('Bdim');
+  });
+
+  test('handles shorthand for 2, 3, 6, 7 degrees', () => {
+    // When useMinorShorthand is true, 2/3/6/7 should convert to Dm/Em/Am/Bdim
+    expect(roman_to_pitch('C', '2', true)).toBe('Dm');
+    expect(roman_to_pitch('C', '3', true)).toBe('Em');
+    expect(roman_to_pitch('C', '6', true)).toBe('Am');
+    expect(roman_to_pitch('C', '7', true)).toBe('Bdim');
+
+    // Major chords should still convert correctly
+    expect(roman_to_pitch('C', '2M', true)).toBe('D');
+    expect(roman_to_pitch('C', '3M', true)).toBe('E');
+    expect(roman_to_pitch('C', '6M', true)).toBe('A');
+    expect(roman_to_pitch('C', '7M', true)).toBe('B');
+
+    // When useMinorShorthand is false, 2/3/6/7 should convert to D/E/A/B (not Dm/Em/Am/Bdim)
+    expect(roman_to_pitch('C', '2', false)).toBe('D');
+    expect(roman_to_pitch('C', '3', false)).toBe('E');
+    expect(roman_to_pitch('C', '6', false)).toBe('A');
+    expect(roman_to_pitch('C', '7', false)).toBe('B');
+    
+    // Explicit minor chords should still convert correctly
+    expect(roman_to_pitch('C', '2m', false)).toBe('Dm');
+    expect(roman_to_pitch('C', '3m', false)).toBe('Em');
+    expect(roman_to_pitch('C', '6m', false)).toBe('Am');
+    expect(roman_to_pitch('C', '7dim', false)).toBe('Bdim');
   });
 
   test('works with different keys', () => {
@@ -64,56 +78,27 @@ describe('roman_to_pitch', () => {
   test('already pitch', () => {
     expect(roman_to_pitch('G', 'F')).toBe('F');
   });
-  
-  test('handles useMinorShorthand=false for 2, 3, 6 degrees', () => {
-    // When useMinorShorthand is false, 2/3/6 should convert to D/E/A (not Dm/Em/Am)
-    expect(roman_to_pitch('C', '2', false)).toBe('D');
-    expect(roman_to_pitch('C', '3', false)).toBe('E');
-    expect(roman_to_pitch('C', '6', false)).toBe('A');
-    
-    // Explicit minor chords should still convert correctly
-    expect(roman_to_pitch('C', '2m', false)).toBe('Dm');
-    expect(roman_to_pitch('C', '3m', false)).toBe('Em');
-    expect(roman_to_pitch('C', '6m', false)).toBe('Am');
-    
-    // Major chords should still convert correctly
-    expect(roman_to_pitch('C', '2M', false)).toBe('D');
-    expect(roman_to_pitch('C', '3M', false)).toBe('E');
-    expect(roman_to_pitch('C', '6M', false)).toBe('A');
-  });
 });
 
 describe('pitch_to_roman', () => {
-  test('converts root chord to 1st degree in C major', () => {
+  test('C major scale, with shorthand', () => {
     expect(pitch_to_roman('C', 'C')).toBe('1');
-  });
-
-  test('converts minor chord to 2nd degree in C major', () => {
     expect(pitch_to_roman('C', 'Dm')).toBe('2');
-  });
-
-  test('converts minor chord to 3rd degree in C major', () => {
     expect(pitch_to_roman('C', 'Em')).toBe('3');
-  });
-
-  test('converts 4th degree chord in C major', () => {
     expect(pitch_to_roman('C', 'F')).toBe('4');
-  });
-
-  test('converts 5th degree chord in C major', () => {
     expect(pitch_to_roman('C', 'G')).toBe('5');
-  });
-
-  test('converts minor chord to 6th degree in C major', () => {
     expect(pitch_to_roman('C', 'Am')).toBe('6');
-  });
-
-  test('converts 7th degree diminished chord to 7 in C major with useMinorShorthand=true', () => {
     expect(pitch_to_roman('C', 'Bdim')).toBe('7');
   });
-
-  test('converts 7th degree chord in C major with useMinorShorthand=false', () => {
-    expect(pitch_to_roman('C', 'Bdim', false)).toBe('7dim');
+  
+  test('C major scale, with no shorthand', () => {
+    expect(pitch_to_roman('C', 'C', false)).toBe('1');
+    expect(pitch_to_roman('C', 'Dm', false)).toBe('2m');
+    expect(pitch_to_roman('C', 'Em', false)).toBe('3m');
+    expect(pitch_to_roman('C', 'F', false)).toBe('4');
+    expect(pitch_to_roman('C', 'G', false)).toBe('5');
+    expect(pitch_to_roman('C', 'A', false)).toBe('6');
+    expect(pitch_to_roman('C', 'B', false)).toBe('7');
   });
 
   test('handles chord types correctly', () => {
@@ -121,6 +106,32 @@ describe('pitch_to_roman', () => {
     expect(pitch_to_roman('C', 'Fmaj7')).toBe('4maj7');
     expect(pitch_to_roman('C', 'G7')).toBe('57');
     expect(pitch_to_roman('C', 'Dm7b5')).toBe('2m7b5');
+  });
+
+  test('handles shorthand for 2, 3, 6, 7 degrees', () => {
+    // When useMinorShorthand is true, Dm/Em/Am/Bdim should convert to 2/3/6/7
+    expect(pitch_to_roman('C', 'Dm', true)).toBe('2');
+    expect(pitch_to_roman('C', 'Em', true)).toBe('3');
+    expect(pitch_to_roman('C', 'Am', true)).toBe('6');
+    expect(pitch_to_roman('C', 'Bdim', true)).toBe('7');
+
+    // Major chords should convert to 2M/3M/6M/7M
+    expect(pitch_to_roman('C', 'D', true)).toBe('2M');
+    expect(pitch_to_roman('C', 'E', true)).toBe('3M');
+    expect(pitch_to_roman('C', 'A', true)).toBe('6M');
+    expect(pitch_to_roman('C', 'B', true)).toBe('7M');
+
+    // When useMinorShorthand is false, D/E/A/B should convert to 2/3/6/7
+    expect(pitch_to_roman('C', 'D', false)).toBe('2');
+    expect(pitch_to_roman('C', 'E', false)).toBe('3');
+    expect(pitch_to_roman('C', 'A', false)).toBe('6');
+    expect(pitch_to_roman('C', 'B', false)).toBe('7');
+
+    // Minor chords should convert to 2m/3m/6m/7dim
+    expect(pitch_to_roman('C', 'Dm', false)).toBe('2m');
+    expect(pitch_to_roman('C', 'Em', false)).toBe('3m');
+    expect(pitch_to_roman('C', 'Am', false)).toBe('6m');
+    expect(pitch_to_roman('C', 'Bdim', false)).toBe('7dim');
   });
 
   test('works with different keys', () => {
@@ -148,32 +159,10 @@ describe('pitch_to_roman', () => {
   test('returns original input for non-diatonic chord', () => {
     expect(pitch_to_roman('C', 'C#')).toBe('C#');
   });
-  
-  test('handles 2/3/6 major chords with useMinorShorthand=true', () => {
-    // When useMinorShorthand is true, major 2/3/6 chords should convert to 2M/3M/6M
-    expect(pitch_to_roman('C', 'D')).toBe('2M');
-    expect(pitch_to_roman('C', 'E')).toBe('3M');
-    expect(pitch_to_roman('C', 'A')).toBe('6M');
-  });
-  
-  test('handles useMinorShorthand=false for all chords', () => {
-    // Without minor shorthand, minor chords should keep the 'm'
-    expect(pitch_to_roman('C', 'Dm', false)).toBe('2m');
-    expect(pitch_to_roman('C', 'Em', false)).toBe('3m');
-    expect(pitch_to_roman('C', 'Am', false)).toBe('6m');
-    
-    // Major chords should convert without adding 'M'
-    expect(pitch_to_roman('C', 'D', false)).toBe('2');
-    expect(pitch_to_roman('C', 'E', false)).toBe('3');
-    expect(pitch_to_roman('C', 'A', false)).toBe('6');
-    
-    // Diminished chords should keep 'dim'
-    expect(pitch_to_roman('C', 'Bdim', false)).toBe('7dim');
-  });
 });
 
 describe('bidirectional conversion works with useMinorShorthand', () => {
-  test('works with useMinorShorthand=true', () => {
+  test('pitch to roman to pitch, with useMinorShorthand=true', () => {
     const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'Bdim', 'D', 'E', 'A', 'B'];
     const key = 'C';
 
@@ -184,13 +173,35 @@ describe('bidirectional conversion works with useMinorShorthand', () => {
     });
   });
 
-  test('works with useMinorShorthand=false', () => {
+  test('pitch to roman to pitch, with useMinorShorthand=false', () => {
     const chords = ['C', 'Dm', 'Em', 'F', 'G', 'Am', 'B', 'D', 'E', 'A', 'Bdim'];
     const key = 'C';
 
     chords.forEach(chord => {
       const roman = pitch_to_roman(key, chord, false);
       const backToChord = roman_to_pitch(key, roman, false);
+      expect(backToChord).toBe(chord);
+    });
+  });
+
+  test('roman to pitch to roman, with useMinorShorthand=true', () => {
+    const chords = ['1', '2', '3', '4', '5', '6', '7', '2M', '3M', '6M', '7M'];
+    const key = 'C';
+
+    chords.forEach(chord => {
+      const roman = roman_to_pitch(key, chord, true);
+      const backToChord = pitch_to_roman(key, roman, true);
+      expect(backToChord).toBe(chord);
+    });
+  });
+
+  test('roman to pitch to roman, with useMinorShorthand=false', () => {
+    const chords = ['1', '2', '3', '4', '5', '6', '7', '2m', '3m', '6m', '7dim'];
+    const key = 'C';
+
+    chords.forEach(chord => {
+      const roman = roman_to_pitch(key, chord, false);
+      const backToChord = pitch_to_roman(key, roman, false);
       expect(backToChord).toBe(chord);
     });
   });
