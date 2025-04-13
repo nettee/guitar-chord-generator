@@ -8,7 +8,7 @@ import {SVG} from '@svgdotjs/svg.js';
 // ChordBox implements the rendering logic for the chord
 // diagrams.
 class ChordBox {
-  // sel can be a selector or an element.
+  // sel can be a selector or a DOM element.
   constructor(sel, params) {
     this.sel = sel;
     this.params = {
@@ -95,7 +95,9 @@ class ChordBox {
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
     // 根据父容器的大小缩放，并居中
-    const parentElement = document.querySelector(this.sel);
+    const parentElement = typeof this.sel === 'string' 
+      ? document.querySelector(this.sel) 
+      : this.sel;
     const parentHeight = parentElement.clientHeight;
     const parentWidth = parentElement.clientWidth;
     const scaleFactor = Math.min(parentHeight / originalHeight, parentWidth / originalWidth);
