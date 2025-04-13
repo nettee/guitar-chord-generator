@@ -54,7 +54,7 @@ const KeySelect = ({ selectedKey, onKeyChange }: { selectedKey: string, onKeyCha
             value={selectedKey}
             onValueChange={onKeyChange}
         >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-auto min-w-32">
                 <SelectValue placeholder={t('keySelect.placeholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -87,7 +87,7 @@ const ChordPresetSelect = ({ onPresetSelected }: { onPresetSelected: (preset: st
             value={''}
             onValueChange={onPresetSelected}
         >
-            <SelectTrigger className="w-32">
+            <SelectTrigger className="w-auto min-w-32">
                 <SelectValue placeholder={t('chordPresets.placeholder')} />
             </SelectTrigger>
             <SelectContent>
