@@ -17,7 +17,10 @@
   例如： [{ fromString: 6, toString: 1, fret: 1 }] 
   表示： 大横按从6弦到1弦，在1品按住
 */
-export const chordData = {
+
+import { ChordDictionary } from '@/types';
+
+export const chordData: ChordDictionary = {
   C: {
     chord: [[1, 0], [2, 1], [3, 0], [4, 2], [5, 3], [6, 'x']],
   },
@@ -256,27 +259,18 @@ export const chordData = {
   },
   
   B: {
-    chord: [[1, 2], [2, 4], [3, 4], [4, 4], [5, 2], [6, 'x']],
+    position: 2,
+    chord: [[1, 1], [2, 3], [3, 3], [4, 3], [5, 1], [6, 'x']],
     barres: [
-      { fromString: 5, toString: 1, fret: 2 },
+      { fromString: 5, toString: 1, fret: 1 },
     ],
-  },
-  
-  Bmaj7: {
-    chord: [[1, 2], [2, 4], [3, 3], [4, 4], [5, 2], [6, 'x']],
-    barres: [
-      { fromString: 5, toString: 1, fret: 2 },
-    ],
-  },
-  
-  B7: {
-    chord: [[1, 0], [2, 2], [3, 1], [4, 2], [5, 2], [6, 'x']],
   },
   
   Bm: {
-    chord: [[1, 2], [2, 3], [3, 4], [4, 4], [5, 2], [6, 'x']],
+    position: 2,
+    chord: [[1, 1], [2, 2], [3, 3], [4, 4], [5, 1], [6, 'x']],
     barres: [
-      { fromString: 5, toString: 1, fret: 2 },
+      { fromString: 5, toString: 1, fret: 1 },
     ],
   },
   

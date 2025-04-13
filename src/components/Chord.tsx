@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { ChordBox } from '@/chorder/chordbox.js';
-import { chordData } from '@/data/chords.js';
+import { ChordBox } from '@/chorder/chordbox';
+import { chordData } from '@/data/chords';
 
 const generateRandomId = () => {
   const characters = 'abcdefghijklmnopqrstuvwxyz';

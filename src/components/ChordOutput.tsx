@@ -1,7 +1,7 @@
 import React from 'react';
-import Chord from '@/components/Chord.jsx';
+import Chord from '@/components/Chord';
 import { Textarea } from '@/components/ui/textarea';
-import { useChordContext } from '@/contexts/ChordContext.jsx';
+import { useChordContext } from '@/contexts/ChordContext';
 
 const ChordOutput = () => {
     const { chordNames } = useChordContext();

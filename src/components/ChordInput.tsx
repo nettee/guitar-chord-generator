@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { roman_to_pitch, pitch_to_roman } from '@/chorder/degree.js';
+import { roman_to_pitch, pitch_to_roman } from '@/chorder/degree';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useChordContext } from '@/contexts/ChordContext.jsx';
+import { useChordContext } from '@/contexts/ChordContext';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,7 +12,7 @@ const InputTypeEnum = {
     PITCH: 'pitch'
 };
 
-const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
+const InputTypeToggle = ({ inputType, onInputTypeChange }: { inputType: string, onInputTypeChange: (type: string) => void }) => {
     const { t } = useTranslation();
     
     const inputTypeOptions = [
@@ -38,7 +38,7 @@ const InputTypeToggle = ({ inputType, onInputTypeChange }) => {
     );
 };
 
-const KeySelect = ({ selectedKey, onKeyChange }) => {
+const KeySelect = ({ selectedKey, onKeyChange }: { selectedKey: string, onKeyChange: (key: string) => void }) => {
     const { t } = useTranslation();
     
     const availableKeys = [
@@ -70,7 +70,7 @@ const KeySelect = ({ selectedKey, onKeyChange }) => {
     );
 };
 
-const ChordPresetSelect = ({ onPresetSelected }) => {
+const ChordPresetSelect = ({ onPresetSelected }: { onPresetSelected: (preset: string) => void }) => {
     const { t } = useTranslation();
     
     const availableChordPresets = [
@@ -111,7 +111,7 @@ const ChordInput = () => {
     const { setChordNames } = useChordContext();
     const { toast } = useToast();
     
-    const updateChordNames = (selectedKey, inputType, chordDescription) => {
+    const updateChordNames = (selectedKey: string, inputType: string, chordDescription: string) => {
         if (!chordDescription.trim()) {
             setChordNames([]);
             return;
@@ -121,16 +121,16 @@ const ChordInput = () => {
             const romanChordNames = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map(roman => roman.trim())
-                .filter(roman => roman !== '');
-            const pitchChordNames = romanChordNames.map(roman => roman_to_pitch(selectedKey, roman));
+                .map((roman: string) => roman.trim())
+                .filter((roman: string) => roman !== '');
+            const pitchChordNames = romanChordNames.map((roman: string) => roman_to_pitch(selectedKey, roman));
             setChordNames(pitchChordNames);
         } else {
             const pitchChordNames = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map(pitch => pitch.trim())
-                .filter(pitch => pitch !== '');
+                .map((pitch: string) => pitch.trim())
+                .filter((pitch: string) => pitch !== '');
             setChordNames(pitchChordNames);
         }
     };
@@ -140,37 +140,37 @@ const ChordInput = () => {
         updateChordNames(selectedKey, inputType, chordDescription);
     }, []);
 
-    const handleKeyChange = (key) => {
+    const handleKeyChange = (key: string) => {
         setSelectedKey(key);
         updateChordNames(key, inputType, chordDescription);
     };
 
-    const handleInputTypeChange = (type) => {
+    const handleInputTypeChange = (type: string) => {
         setInputType(type);
         let newChordDescription = '';
         if (type === InputTypeEnum.ROMAN) {
             newChordDescription = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map(pitch => pitch_to_roman(selectedKey, pitch))
+                .map((pitch: string) => pitch_to_roman(selectedKey, pitch))
                 .join(' ');
         } else {
             newChordDescription = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map(roman => roman_to_pitch(selectedKey, roman))
+                .map((roman: string) => roman_to_pitch(selectedKey, roman))
                 .join(' ');
         }
         setChordDescription(newChordDescription);
         updateChordNames(selectedKey, type, newChordDescription);
     };
 
-    const handleChordDescriptionChange = (description) => {
+    const handleChordDescriptionChange = (description: string) => {
         setChordDescription(description);
         updateChordNames(selectedKey, inputType, description);
     };
 
-    const handlePresetSelected = (preset) => {
+    const handlePresetSelected = (preset: string) => {
         const newChordDescription = chordDescription + ' ' + preset;
         setChordDescription(newChordDescription);
         updateChordNames(selectedKey, inputType, newChordDescription);

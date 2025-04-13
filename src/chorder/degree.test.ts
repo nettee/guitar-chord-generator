@@ -1,4 +1,5 @@
-import { roman_to_pitch, pitch_to_roman } from './degree.js';
+import { roman_to_pitch, pitch_to_roman } from './degree';
+import { describe, expect, test } from '@jest/globals';
 
 describe('roman_to_pitch', () => {
   test('C major scale, with shorthand', () => {

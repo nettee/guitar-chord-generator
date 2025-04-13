@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ChordOutput from '@/components/ChordOutput.jsx';
-import ChordInput from '@/components/ChordInput.jsx';
-import LanguageSwitcher from '@/components/LanguageSwitcher.jsx';
-import { ChordProvider } from '@/contexts/ChordContext.jsx';
+import ChordOutput from '@/components/ChordOutput';
+import ChordInput from '@/components/ChordInput';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { ChordProvider } from '@/contexts/ChordContext';
 import { Toaster } from "@/components/ui/toaster";
 
 const App = () => {

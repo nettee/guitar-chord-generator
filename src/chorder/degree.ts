@@ -2,14 +2,18 @@
  * 处理级数和弦与音高和弦之间的转换。
  */
 class DegreeTranslator {
-    constructor(useMinorShorthand = true) {
-        // 所有音高
+    // 所有音高
+    private pitches: string[];
+    
+    // 自然大调的音程关系（半音数）
+    private majorScaleIntervals: number[];
+    
+    // 是否使用小和弦简写（2/3/6 表示 Dm/Em/Am）
+    private useMinorShorthand: boolean;
+
+    constructor(useMinorShorthand: boolean = true) {
         this.pitches = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-        
-        // 自然大调的音程关系（半音数）
         this.majorScaleIntervals = [0, 2, 4, 5, 7, 9, 11];
-        
-        // 是否使用小和弦简写（2/3/6 表示 Dm/Em/Am）
         this.useMinorShorthand = useMinorShorthand;
     }
 
@@ -19,7 +23,7 @@ class DegreeTranslator {
      * @param {string} roman - 级数和弦，如 2m7
      * @returns {string} 音高和弦，如 Dm7
      */
-    romanToPitch(key, roman) {
+    romanToPitch(key: string, roman: string): string {
         // 从级数中提取度数（1-7）
         const degree = parseInt(roman.charAt(0));
         
@@ -67,7 +71,7 @@ class DegreeTranslator {
      * @param {string} chord - 音高和弦，如 Dm7
      * @returns {string} 级数和弦，如 2m7
      */
-    pitchToRoman(key, chord) {
+    pitchToRoman(key: string, chord: string): string {
         // 提取和弦根音和类型
         // 假设和弦的第一个字符是根音
         let rootPitch = chord.charAt(0);
@@ -140,7 +144,7 @@ class DegreeTranslator {
  * @param {boolean} useMinorShorthand - 是否使用小和弦简写，默认为true
  * @returns {string} 音高和弦，如 Dm7，如果转换失败则返回原始入参roman
  */
-function roman_to_pitch(key, roman, useMinorShorthand = true) {
+function roman_to_pitch(key: string, roman: string, useMinorShorthand: boolean = true): string {
     try {
         const localTranslator = new DegreeTranslator(useMinorShorthand);
         return localTranslator.romanToPitch(key, roman);
@@ -156,7 +160,7 @@ function roman_to_pitch(key, roman, useMinorShorthand = true) {
  * @param {boolean} useMinorShorthand - 是否使用小和弦简写，默认为true
  * @returns {string} 级数和弦，如 2m7，如果转换失败则返回原始入参chord
  */
-function pitch_to_roman(key, chord, useMinorShorthand = true) {
+function pitch_to_roman(key: string, chord: string, useMinorShorthand: boolean = true): string {
     try {
         const localTranslator = new DegreeTranslator(useMinorShorthand);
         return localTranslator.pitchToRoman(key, chord);

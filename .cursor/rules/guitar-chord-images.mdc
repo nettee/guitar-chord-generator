@@ -13,7 +13,7 @@ alwaysApply: false
 
 该项目是一个纯前端项目，形态为一个 Web 页面。
 
-- 使用 JavaScript (ES6) 语言
+- 使用 JavaScript (ES6) 语言，正在往 TypeScript 迁移中
 - 使用 React + TailWind CSS + Shadcn UI 构建用户界面
 - 使用 Vite 作为构建工具，以支持快速开发和热更新
 - 使用 Jest 进行单元测试
@@ -21,13 +21,27 @@ alwaysApply: false
 ## 关键文件说明
 
 - **src/**: 源代码目录
-  - [App.jsx](mdc:src/App.jsx): React 应用入口
+  - [index.tsx](mdc:src/index.tsx): 应用程序入口点
+  - [App.tsx](mdc:src/App.tsx): React 应用主组件
+  - [main.css](mdc:src/main.css): 全局样式文件
   - **components/**: React 组件目录
-    - [Chord.jsx](mdc:src/components/Chord.jsx): 渲染和弦图的组件。
-  - **scss/**: 样式文件目录
-    - [styles.scss](mdc:src/scss/styles.scss): 项目的样式文件入口
+    - [Chord.tsx](mdc:src/components/Chord.tsx): 渲染和弦图的组件
+    - [ChordInput.tsx](mdc:src/components/ChordInput.tsx): 和弦输入表单组件
+    - [ChordOutput.tsx](mdc:src/components/ChordOutput.tsx): 和弦显示输出组件
+    - [LanguageSwitcher.tsx](mdc:src/components/LanguageSwitcher.tsx): 语言切换组件
+    - **ui/**: Shadcn UI 组件
   - **data/**: 数据文件目录
-    - [chords.js](mdc:src/data/chords.js): 包含和弦的按法数据
+    - [chords.ts](mdc:src/data/chords.ts): 包含和弦的按法数据
+  - **chorder/**: 和弦处理核心逻辑
+    - [degree.js](mdc:src/chorder/degree.js): 和弦音阶处理
+    - [chordbox.js](mdc:src/chorder/chordbox.js): 和弦图绘制
+  - **types/**: TypeScript 类型定义
+  - **i18n/**: 国际化配置
+    - **locales/**: 语言本地化文件
+  - **contexts/**: React 上下文组件
+  - **hooks/**: 自定义 React Hooks
+    - @use-toast.ts: Toast 通知钩子
+  - **lib/**: 工具函数和辅助库
 
 ## 其他信息
 
