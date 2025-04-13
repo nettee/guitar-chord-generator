@@ -1,5 +1,5 @@
 /**
- * 第三方库类型声明
+ * 为 JavaScript 库添加类型声明
  */
 
 declare module '@/chorder/chordbox' {
@@ -19,22 +19,4 @@ declare module '@/chorder/chordbox' {
      */
     draw(data: ChordDefinition): void;
   }
-}
-
-declare module '@/chorder/degree' {
-  /**
-   * 将级数和弦转换为音名和弦
-   * @param key 调
-   * @param degree 级数和弦
-   * @returns 音名和弦
-   */
-  export function degree_to_name(key: string, degree: string): string;
-  
-  /**
-   * 将音名和弦转换为级数和弦
-   * @param key 调
-   * @param name 音名和弦
-   * @returns 级数和弦
-   */
-  export function name_to_degree(key: string, name: string): string;
 }
