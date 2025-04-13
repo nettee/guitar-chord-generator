@@ -1,7 +1,7 @@
 {
-  "name": "guitar-chord-images",
+  "name": "guitar-chord-generator",
   "version": "1.0.0",
-  "description": "Guitar chord image generator",
+  "description": "Guitar chord generator",
   "main": "index.js",
   "type": "module",
   "scripts": {

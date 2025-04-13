@@ -6,7 +6,7 @@
 
 ## Introduction
 
-🎵 Guitar Chord Images is a web-based guitar chord diagram generator that helps you quickly generate chord diagrams, supporting input by chord degree or chord name, offering various preset chord progressions, a perfect companion for your guitar practice.
+🎵 Guitar Chord Generator is a web-based guitar chord diagram generator that helps you quickly generate chord diagrams, supporting input by chord degree or chord name, offering various preset chord progressions, a perfect companion for your guitar practice.
 
 ![Guitar Chord Generator Example](./readme/example-en.png)
 
