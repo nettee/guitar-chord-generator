@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { roman_to_pitch, pitch_to_roman } from '@/chorder/degree';
+import { degree_to_name, name_to_degree } from '@/chorder/degree';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useChordContext } from '@/contexts/ChordContext';
@@ -8,16 +8,16 @@ import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 const InputTypeEnum = {
-    ROMAN: 'roman',
-    PITCH: 'pitch'
+    DEGREE: 'degree',
+    NAME: 'name'
 };
 
 const InputTypeToggle = ({ inputType, onInputTypeChange }: { inputType: string, onInputTypeChange: (type: string) => void }) => {
     const { t } = useTranslation();
     
     const inputTypeOptions = [
-        { value: InputTypeEnum.ROMAN, label: t('inputType.byDegree') },
-        { value: InputTypeEnum.PITCH, label: t('inputType.byName') }
+        { value: InputTypeEnum.DEGREE, label: t('inputType.byDegree') },
+        { value: InputTypeEnum.NAME, label: t('inputType.byName') }
     ];
     
     return (
@@ -106,7 +106,7 @@ const ChordPresetSelect = ({ onPresetSelected }: { onPresetSelected: (preset: st
 const ChordInput = () => {
     const { t } = useTranslation();
     const [selectedKey, setSelectedKey] = useState('C');
-    const [inputType, setInputType] = useState(InputTypeEnum.ROMAN);
+    const [inputType, setInputType] = useState(InputTypeEnum.DEGREE);
     const [chordDescription, setChordDescription] = useState('4 5 3 6 2 5 1');
     const { setChordNames } = useChordContext();
     const { toast } = useToast();
@@ -117,21 +117,21 @@ const ChordInput = () => {
             return;
         }
 
-        if (inputType === 'roman') {
-            const romanChordNames = chordDescription
+        if (inputType === InputTypeEnum.DEGREE) {
+            const degreeChordNames = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map((roman: string) => roman.trim())
-                .filter((roman: string) => roman !== '');
-            const pitchChordNames = romanChordNames.map((roman: string) => roman_to_pitch(selectedKey, roman));
-            setChordNames(pitchChordNames);
+                .map((degreeChord: string) => degreeChord.trim())
+                .filter((degreeChord: string) => degreeChord !== '');
+            const nameChordNames = degreeChordNames.map((degreeChord: string) => degree_to_name(selectedKey, degreeChord));
+            setChordNames(nameChordNames);
         } else {
-            const pitchChordNames = chordDescription
+            const nameChordNames = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map((pitch: string) => pitch.trim())
-                .filter((pitch: string) => pitch !== '');
-            setChordNames(pitchChordNames);
+                .map((nameChord: string) => nameChord.trim())
+                .filter((nameChord: string) => nameChord !== '');
+            setChordNames(nameChordNames);
         }
     };
 
@@ -148,17 +148,17 @@ const ChordInput = () => {
     const handleInputTypeChange = (type: string) => {
         setInputType(type);
         let newChordDescription = '';
-        if (type === InputTypeEnum.ROMAN) {
+        if (type === InputTypeEnum.DEGREE) {
             newChordDescription = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map((pitch: string) => pitch_to_roman(selectedKey, pitch))
+                .map((nameChord: string) => name_to_degree(selectedKey, nameChord))
                 .join(' ');
         } else {
             newChordDescription = chordDescription
                 .trim()
                 .split(/\s+/)
-                .map((roman: string) => roman_to_pitch(selectedKey, roman))
+                .map((degreeChord: string) => degree_to_name(selectedKey, degreeChord))
                 .join(' ');
         }
         setChordDescription(newChordDescription);

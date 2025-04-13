@@ -23,18 +23,18 @@ declare module '@/chorder/chordbox' {
 
 declare module '@/chorder/degree' {
   /**
-   * 将罗马数字度数转换为音高和弦名
+   * 将级数和弦转换为音名和弦
    * @param key 调
-   * @param roman 罗马数字度数
-   * @returns 音高和弦名
+   * @param degree 级数和弦
+   * @returns 音名和弦
    */
-  export function roman_to_pitch(key: string, roman: string): string;
+  export function degree_to_name(key: string, degree: string): string;
   
   /**
-   * 将音高和弦名转换为罗马数字度数
+   * 将音名和弦转换为级数和弦
    * @param key 调
-   * @param pitch 音高和弦名
-   * @returns 罗马数字度数
+   * @param name 音名和弦
+   * @returns 级数和弦
    */
-  export function pitch_to_roman(key: string, pitch: string): string;
+  export function name_to_degree(key: string, name: string): string;
 }
