@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { ChordBox } from '@/chorder/chordbox';
+import { drawChord } from '@/chorder/drawChord';
 import { chordData } from '@/data/chords';
 
 const Chord = ({ name }) => {
@@ -24,11 +25,9 @@ const Chord = ({ name }) => {
       return;
     }
 
-    const chordBox = new ChordBox(chordRef.current, {
-      numFrets: 4,
-      showTuning: false,
-    });
-    chordBox.draw(chordData[name]);
+    // 绘制和弦图
+    drawChord(chordRef.current, chordData[name]);
+    
     hasRenderedRef.current = true; // 标记为已渲染
     
   }, [name]);
