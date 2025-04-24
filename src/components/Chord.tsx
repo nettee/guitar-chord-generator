@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { ChordBox } from '@/chorder/chordbox';
 import { drawChord } from '@/chorder/drawChord';
 import { chordData } from '@/data/chords';
 
