@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { degree_to_name, name_to_degree } from '@/chorder/degree';
 import { Textarea } from "@/components/ui/textarea";
@@ -6,62 +6,42 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useChordContext } from '@/contexts/ChordContext';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { LucideIcon, Music, SwitchCamera, Trash2, ClipboardCopy, SquareDashedBottomCode } from 'lucide-react';
 
 const InputTypeEnum = {
     DEGREE: 'degree',
     NAME: 'name'
 };
 
-const InputTypeToggle = ({ inputType, onInputTypeChange }: { inputType: string, onInputTypeChange: (type: string) => void }) => {
-    const { t } = useTranslation();
-    
-    const inputTypeOptions = [
-        { value: InputTypeEnum.DEGREE, label: t('inputType.byDegree') },
-        { value: InputTypeEnum.NAME, label: t('inputType.byName') }
-    ];
-    
-    return (
-        <div className="flex w-fit rounded-md bg-gray-200 p-1 dark:bg-[#222]">
-            {inputTypeOptions.map((option) => (
-                <button 
-                    key={option.value}
-                    className="relative w-fit px-4 py-2 text-sm font-semibold text-foreground transition-colors"
-                    onClick={() => onInputTypeChange(option.value)}
-                >
-                    <span className="relative z-10">{option.label}</span>
-                    {inputType === option.value && (
-                        <span className="absolute inset-0 z-0 rounded-md bg-background shadow-sm" style={{ transform: 'none', transformOrigin: '50% 50% 0px' }}></span>
-                    )}
-                </button>
-            ))}
-        </div>
-    );
-};
-
-const KeySelect = ({ selectedKey, onKeyChange }: { selectedKey: string, onKeyChange: (key: string) => void }) => {
-    const { t } = useTranslation();
-    
-    const availableKeys = [
-        { value: 'C', label: t('keySelect.C') },
-        { value: 'G', label: t('keySelect.G') },
-        { value: 'D', label: t('keySelect.D') },
-        { value: 'A', label: t('keySelect.A') },
-        { value: 'E', label: t('keySelect.E') }
-    ];
-    
+const GenericSelect = ({ 
+    value, 
+    onValueChange, 
+    options, 
+    placeholder,
+    className = "w-auto",
+    icon: Icon
+}: { 
+    value: string, 
+    onValueChange: (value: string) => void, 
+    options: {value: string, label: string}[],
+    placeholder: string,
+    className?: string,
+    icon?: LucideIcon
+}) => {
     return (
         <Select 
-            value={selectedKey}
-            onValueChange={onKeyChange}
+            value={value}
+            onValueChange={onValueChange}
         >
-            <SelectTrigger className="w-auto min-w-32">
-                <SelectValue placeholder={t('keySelect.placeholder')} />
+            <SelectTrigger className={`${className}`}>
+                {Icon && <Icon className="mr-2 h-4 w-4" />}
+                <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    {availableKeys.map(key => (
-                        <SelectItem key={key.value} value={key.value}>
-                            {key.label}
+                    {options.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                            {option.label}
                         </SelectItem>
                     ))}
                 </SelectGroup>
@@ -83,25 +63,17 @@ const ChordPresetSelect = ({ onPresetSelected }: { onPresetSelected: (preset: st
     ];
     
     return (
-        <Select
+        <GenericSelect
             value={''}
             onValueChange={onPresetSelected}
-        >
-            <SelectTrigger className="w-auto min-w-32">
-                <SelectValue placeholder={t('chordPresets.placeholder')} />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    {availableChordPresets.map(preset => (
-                        <SelectItem key={preset.value} value={preset.value}>
-                            {preset.label}
-                        </SelectItem>
-                    ))}
-                </SelectGroup>
-            </SelectContent>
-        </Select>
+            options={availableChordPresets}
+            placeholder={t('chordPresets.placeholder')}
+            icon={SquareDashedBottomCode}
+        />
     );
 };
+
+
 
 const ChordInput = () => {
     const { t } = useTranslation();
@@ -183,40 +155,51 @@ const ChordInput = () => {
         });
     };
 
+    const keyOptions = [
+        { value: 'C', label: t('keySelect.C') },
+        { value: 'G', label: t('keySelect.G') },
+        { value: 'D', label: t('keySelect.D') },
+        { value: 'A', label: t('keySelect.A') },
+        { value: 'E', label: t('keySelect.E') }
+    ];
+
+    const inputTypeOptions = [
+        { value: InputTypeEnum.DEGREE, label: t('inputType.byDegree') },
+        { value: InputTypeEnum.NAME, label: t('inputType.byName') }
+    ];
+
     return (
-        <div className="flex flex-col gap-4 items-center">
-            <div className="w-full flex flex-row gap-2">
-                <KeySelect 
-                    selectedKey={selectedKey} 
-                    onKeyChange={handleKeyChange} 
-                />
-            </div>
-            <div className='w-full flex flex-row gap-2 items-center'>
-                <div className="w-1/2 flex flex-row gap-2">
-                    <InputTypeToggle 
-                        inputType={inputType} 
-                        onInputTypeChange={handleInputTypeChange} 
-                    />
-                </div>
-                <div className="w-1/2 ml-auto flex flex-row-reverse gap-2 items-center">
-                    <Button
-                        variant="destructive"
-                        className=""
-                        onClick={() => handleChordDescriptionChange('')}
-                    >
-                        {t('buttons.clear')}
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className=""
-                        onClick={handleCopyChordDescription}
-                    >
-                        {t('buttons.copy')}
-                    </Button>
-                    <ChordPresetSelect 
-                        onPresetSelected={handlePresetSelected}
-                    />
-                </div>
+        <div className="flex flex-col gap-4">
+            <div className="w-full sm:w-80 flex flex-row gap-2">
+                {[
+                    {
+                        label: t('keySelect.label'),
+                        value: selectedKey,
+                        onValueChange: handleKeyChange,
+                        options: keyOptions,
+                        placeholder: t('keySelect.placeholder'),
+                        icon: Music
+                    },
+                    {
+                        label: t('inputType.label'),
+                        value: inputType,
+                        onValueChange: handleInputTypeChange,
+                        options: inputTypeOptions,
+                        placeholder: t('inputType.placeholder'),
+                        icon: SwitchCamera,
+                    }
+                ].map((selectConfig, index) => (
+                    <div key={index} className="flex flex-1 items-center justify-between">
+                        <GenericSelect 
+                            value={selectConfig.value}
+                            onValueChange={selectConfig.onValueChange}
+                            className='w-full'
+                            options={selectConfig.options}
+                            placeholder={selectConfig.placeholder}
+                            icon={selectConfig.icon}
+                        />
+                    </div>
+                ))}
             </div>
             <div className="w-full flex justify-center items-center">
                 <Textarea
@@ -226,6 +209,28 @@ const ChordInput = () => {
                     onChange={(e) => handleChordDescriptionChange(e.target.value)}
                 />
             </div>
+            <div className="flex w-full ml-auto flex-row-reverse gap-2 items-center">
+                <Button
+                    variant="destructive"
+                    className="px-3 h-9 sm:px-4"
+                    onClick={() => handleChordDescriptionChange('')}
+                >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline-block sm:ml-2">{t('buttons.clear')}</span>
+                </Button>
+                <Button
+                    variant="outline"
+                    className="px-3 h-9 sm:px-4"
+                    onClick={handleCopyChordDescription}
+                >
+                    <ClipboardCopy className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline-block sm:ml-2">{t('buttons.copy')}</span>
+                </Button>
+                <ChordPresetSelect 
+                    onPresetSelected={handlePresetSelected}
+                />
+            </div>
+            
         </div>
     );
 };
