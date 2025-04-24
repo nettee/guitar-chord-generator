@@ -1,6 +1,135 @@
 import {SVG} from '@svgdotjs/svg.js';
 
 /**
+ * CanvasDrawer implements low-level canvas drawing operations
+ * It encapsulates the SVG.js operations to provide a simplified interface
+ */
+class CanvasDrawer {
+    /**
+     * Creates a new CanvasDrawer instance
+     * @param {HTMLElement} container - A DOM element where the diagram will be rendered
+     * @param {number} width - Original width of the canvas
+     * @param {number} height - Original height of the canvas
+     */
+    constructor(container, width, height) {
+        this.canvas = this.createCanvas(container, width, height);
+    }
+
+    /**
+     * Creates the SVG canvas element and configures its initial properties
+     * @param {HTMLElement} container - A DOM element where the diagram will be rendered
+     * @param {number} width - Original width of the canvas
+     * @param {number} height - Original height of the canvas
+     * @returns {SVG} - The SVG canvas element
+     */
+    createCanvas(container, width, height) {
+        // Create canvas and add it to the DOM
+        const canvas = SVG()
+            .addTo(container)
+            .size(width, height)
+            .viewbox(0, 0, width, height)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        // Scale according to parent container size, and center
+        const parentHeight = container.clientHeight;
+        const parentWidth = container.clientWidth;
+        const scaleFactor = Math.min(parentHeight / height, parentWidth / width);
+
+        canvas.scale(scaleFactor);
+        canvas.translate((parentWidth - width) / 2, (parentHeight - height) / 2);
+
+        return canvas;
+    }
+
+    /**
+     * Draws text on the canvas
+     * @param {number} x - X coordinate
+     * @param {number} y - Y coordinate
+     * @param {string} msg - Text message to display
+     * @param {Object} font - Text font options (must include family, size, style, weight)
+     * @param {Object} options - Required styling options
+     * @param {string|Object} options.stroke - Color string or stroke options object
+     * @param {string} options.fill - Fill color
+     * @returns {Object} - The text element object
+     */
+    drawText(x, y, msg, font, options) {
+        const text = this.canvas
+            .text(`${msg}`)
+            .font(font)
+            .stroke(options.stroke)
+            .fill(options.fill);
+
+        return text.move(x - text.length() / 2, y);
+    }
+
+    /**
+     * Draws a line on the canvas
+     * @param {number} x - Starting X coordinate
+     * @param {number} y - Starting Y coordinate
+     * @param {number} newX - Ending X coordinate
+     * @param {number} newY - Ending Y coordinate
+     * @returns {Object} - The line element object
+     */
+    drawLine(x, y, newX, newY) {
+        return this.canvas
+            .line(0, 0, newX - x, newY - y)
+            .move(x, y);
+    }
+
+    /**
+     * Draws a rectangle on the canvas
+     * @param {number} x - X coordinate
+     * @param {number} y - Y coordinate
+     * @param {number} width - Rectangle width
+     * @param {number} height - Rectangle height
+     * @param {Object} options - Optional styling options
+     * @param {string} options.fill - Fill color
+     * @param {Object} options.stroke - Stroke options (e.g., { width: 1, color: '#000' })
+     * @param {number} options.radius - Corner radius
+     * @returns {Object} - The rectangle element object
+     */
+    drawRect(x, y, width, height, options = {}) {
+        const rect = this.canvas
+            .rect(width, height)
+            .move(x, y);
+        if (options.fill) {
+            rect.fill(options.fill);
+        }
+        if (options.stroke) {
+            rect.stroke(options.stroke);
+        }
+        if (options.radius) {
+            rect.radius(options.radius);
+        }
+        return rect;
+    }
+
+    /**
+     * Draws a circle on the canvas
+     * @param {number} x - X coordinate of the center
+     * @param {number} y - Y coordinate of the center
+     * @param {number} radius - Circle radius
+     * @param {Object} options - Optional styling options
+     * @param {string} options.fill - Fill color
+     * @param {Object} options.stroke - Stroke options (e.g., { width: 1, color: '#000' })
+     * @returns {Object} - The circle element object
+     */
+    drawCircle(x, y, radius, options = {}) {
+        const circle = this.canvas
+            .circle()
+            .move(x, y)
+            .radius(radius);
+        if (options.fill) {
+            circle.fill(options.fill);
+        }
+        if (options.stroke) {
+            circle.stroke(options.stroke);
+        }
+        return circle;
+    }
+}
+
+/**
  * ChordBox implements the rendering logic for the chord diagrams.
  * This class handles drawing guitar chord diagrams with customizable
  * parameters including strings, frets, positions, and styling.
@@ -83,40 +212,11 @@ class ChordBox {
      * @param {Array} options.tuning - Array of string tuning labels
      */
     draw(container, { chord, position, barres, positionText, tuning }) {
-        this.canvas = this.createCanvas(container);
+        this.drawer = new CanvasDrawer(container, this.params.width, this.params.height);
 
         this.doDraw({
             chord, position, barres, positionText, tuning,
         });
-    }
-
-    /**
-     * Creates the SVG canvas element and configures its initial properties
-     * Handles sizing, viewbox and scaling to fit the parent container
-     * 
-     * @param {HTMLElement} container - A DOM element where the chord diagram will be rendered
-     * @returns {SVG} - The SVG canvas element
-     */
-    createCanvas(container) {
-        const originalWidth = this.params.width;
-        const originalHeight = this.params.height;
-
-        // Create canvas and add it to the DOM
-        const canvas = SVG()
-            .addTo(container)
-            .size(originalWidth, originalHeight)
-            .viewbox(0, 0, originalWidth, originalHeight)
-            .attr('preserveAspectRatio', 'xMidYMid meet');
-
-        // 根据父容器的大小缩放，并居中
-        const parentHeight = container.clientHeight;
-        const parentWidth = container.clientWidth;
-        const scaleFactor = Math.min(parentHeight / originalHeight, parentWidth / originalWidth);
-
-        canvas.scale(scaleFactor);
-        canvas.translate((parentWidth - originalWidth) / 2, (parentHeight - originalHeight) / 2);
-
-        return canvas;
     }
 
     /**
@@ -148,18 +248,32 @@ class ChordBox {
             // Draw guitar bridge
             const bridgeWidth = this.x + spacing * (this.numStrings - 1) - fromX + (this.params.strokeWidth / 2);
             const bridgeHeight = this.y - fromY;
-            this.drawRect(fromX, fromY, bridgeWidth, bridgeHeight, {
+            this.drawer.drawRect(fromX, fromY, bridgeWidth, bridgeHeight, {
                 fill: this.params.bridgeColor,
                 stroke: { width: 0 },
             });
         } else {
             // Draw position number
-            this.drawText(this.x - this.spacing / 2 - this.spacing * 0.1, this.y + this.fretSpacing * this.positionText, this.position);
+            this.drawer.drawText(
+                this.x - this.spacing / 2 - this.spacing * 0.1, 
+                this.y + this.fretSpacing * this.positionText, 
+                this.position,
+                {
+                    family: this.params.fontFamily,
+                    size: this.metrics.fontSize,
+                    style: this.params.fontStyle,
+                    weight: this.params.fontWeight
+                },
+                {
+                    stroke: this.params.textColor,
+                    fill: this.params.textColor
+                }
+            );
         }
 
         // Draw strings
         for (let i = 0; i < this.numStrings; i += 1) {
-            this.drawLine(this.x + spacing * i, this.y, this.x + spacing * i, this.y + fretSpacing * this.numFrets).stroke({
+            this.drawer.drawLine(this.x + spacing * i, this.y, this.x + spacing * i, this.y + fretSpacing * this.numFrets).stroke({
                 width: this.params.stringWidth,
                 color: this.params.stringColor,
             });
@@ -167,7 +281,7 @@ class ChordBox {
 
         // Draw frets
         for (let i = 0; i < this.numFrets + 1; i += 1) {
-            this.drawLine(this.x, this.y + fretSpacing * i, this.x + spacing * (this.numStrings - 1), this.y + fretSpacing * i).stroke({
+            this.drawer.drawLine(this.x, this.y + fretSpacing * i, this.x + spacing * (this.numStrings - 1), this.y + fretSpacing * i).stroke({
                 width: this.params.fretWidth,
                 color: this.params.fretColor,
             });
@@ -176,7 +290,21 @@ class ChordBox {
         // Draw tuning keys
         if (this.params.showTuning && this.tuning.length !== 0) {
             for (let i = 0; i < Math.min(this.numStrings, this.tuning.length); i += 1) {
-                this.drawText(this.x + this.spacing * i, this.y + this.numFrets * this.fretSpacing + this.fretSpacing / 12, this.tuning[i]);
+                this.drawer.drawText(
+                    this.x + this.spacing * i, 
+                    this.y + this.numFrets * this.fretSpacing + this.fretSpacing / 12, 
+                    this.tuning[i],
+                    {
+                        family: this.params.fontFamily,
+                        size: this.metrics.fontSize,
+                        style: this.params.fontStyle,
+                        weight: this.params.fontWeight
+                    },
+                    {
+                        stroke: this.params.textColor,
+                        fill: this.params.textColor
+                    }
+                );
             }
         }
 
@@ -218,7 +346,7 @@ class ChordBox {
         }
 
         if (!mute) {
-            this.drawCircle(
+            this.drawer.drawCircle(
                 x, 
                 y - this.fretSpacing / 2, 
                 this.params.circleRadius || this.metrics.circleRadius, 
@@ -228,21 +356,44 @@ class ChordBox {
                 }
             );
         } else {
-            this.drawText(x, y - this.fretSpacing, 'X');
+            this.drawer.drawText(
+                x, 
+                y - this.fretSpacing, 
+                'X',
+                {
+                    family: this.params.fontFamily,
+                    size: this.metrics.fontSize,
+                    style: this.params.fontStyle,
+                    weight: this.params.fontWeight
+                },
+                {
+                    stroke: this.params.textColor,
+                    fill: this.params.textColor
+                }
+            );
         }
 
         if (label) {
             const fontSize = this.metrics.fontSize * 0.55;
             const textYShift = fontSize * 0.66;
-            this.drawText(x, y - this.fretSpacing / 2 - textYShift, label, {
-                weight: this.params.labelWeight,
-                size: fontSize,
-            })
-                .stroke({
-                    width: 0.7,
-                    color: fretNum !== 0 ? this.params.labelColor : this.params.strokeColor,
-                })
-                .fill(fretNum !== 0 ? this.params.labelColor : this.params.strokeColor);
+            this.drawer.drawText(
+                x, 
+                y - this.fretSpacing / 2 - textYShift, 
+                label, 
+                {
+                    family: this.params.fontFamily,
+                    size: fontSize,
+                    style: this.params.fontStyle,
+                    weight: this.params.labelWeight
+                },
+                {
+                    stroke: {
+                        width: 0.7,
+                        color: fretNum !== 0 ? this.params.labelColor : this.params.strokeColor,
+                    },
+                    fill: fretNum !== 0 ? this.params.labelColor : this.params.strokeColor
+                }
+            );
         }
 
         return this;
@@ -270,99 +421,12 @@ class ChordBox {
         const y = this.y + this.fretSpacing * (fretNum - 1) + this.fretSpacing / 4;
         const yTo = this.y + this.fretSpacing * (fretNum - 1) + (this.fretSpacing / 4) * 3;
 
-        this.drawRect(x, y, xTo - x, yTo - y, {
+        this.drawer.drawRect(x, y, xTo - x, yTo - y, {
             fill: this.params.strokeColor,
             radius: this.metrics.barreRadius,
         });
 
         return this;
-    }
-
-    /**
-     * Draws text on the canvas
-     * @param {number} x - X coordinate
-     * @param {number} y - Y coordinate
-     * @param {string} msg - Text message to display
-     * @param {Object} attrs - Optional text attributes to override defaults
-     * @returns {Object} - The text element object
-     */
-    drawText(x, y, msg, attrs) {
-        const textAttrs = {
-            ...{
-                family: this.params.fontFamily,
-                size: this.metrics.fontSize,
-                style: this.params.fontStyle,
-                weight: this.params.fontWeight,
-            },
-            ...attrs,
-        };
-
-        const text = this.canvas
-            .text(`${msg}`)
-            .stroke(this.params.textColor)
-            .fill(this.params.textColor)
-            .font(textAttrs);
-
-        return text.move(x - text.length() / 2, y);
-    }
-
-    /**
-     * Draws a line on the canvas
-     * @param {number} x - Starting X coordinate
-     * @param {number} y - Starting Y coordinate
-     * @param {number} newX - Ending X coordinate
-     * @param {number} newY - Ending Y coordinate
-     * @returns {Object} - The line element object
-     */
-    drawLine(x, y, newX, newY) {
-        return this.canvas.line(0, 0, newX - x, newY - y).move(x, y);
-    }
-
-    /**
-     * Draws a rectangle on the canvas
-     * @param {number} x - X coordinate
-     * @param {number} y - Y coordinate
-     * @param {number} width - Rectangle width
-     * @param {number} height - Rectangle height
-     * @param {Object} options - Optional styling options
-     * @param {string} options.fill - Fill color
-     * @param {Object} options.stroke - Stroke options (e.g., { width: 1, color: '#000' })
-     * @param {number} options.radius - Corner radius
-     * @returns {Object} - The rectangle element object
-     */
-    drawRect(x, y, width, height, options = {}) {
-        const rect = this.canvas.rect(width, height).move(x, y);
-        if (options.fill) {
-            rect.fill(options.fill);
-        }
-        if (options.stroke) {
-            rect.stroke(options.stroke);
-        }
-        if (options.radius) {
-            rect.radius(options.radius);
-        }
-        return rect;
-    }
-
-    /**
-     * Draws a circle on the canvas
-     * @param {number} x - X coordinate of the center
-     * @param {number} y - Y coordinate of the center
-     * @param {number} radius - Circle radius
-     * @param {Object} options - Optional styling options
-     * @param {string} options.fill - Fill color
-     * @param {Object} options.stroke - Stroke options (e.g., { width: 1, color: '#000' })
-     * @returns {Object} - The circle element object
-     */
-    drawCircle(x, y, radius, options = {}) {
-        const circle = this.canvas.circle().move(x, y).radius(radius);
-        if (options.fill) {
-            circle.fill(options.fill);
-        }
-        if (options.stroke) {
-            circle.stroke(options.stroke);
-        }
-        return circle;
     }
 }
 
