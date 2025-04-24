@@ -18,7 +18,7 @@ const GenericSelect = ({
     onValueChange, 
     options, 
     placeholder,
-    className = "w-auto",
+    className = "",
     icon: Icon
 }: { 
     value: string, 
@@ -33,7 +33,7 @@ const GenericSelect = ({
             value={value}
             onValueChange={onValueChange}
         >
-            <SelectTrigger className={`${className}`}>
+            <SelectTrigger className={`w-auto ${className}`}>
                 {Icon && <Icon className="mr-2 h-4 w-4" />}
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
