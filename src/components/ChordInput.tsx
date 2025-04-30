@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { degree_to_name, name_to_degree } from '@/chorder/degree';
+import { degree_to_name, name_to_degree } from '@/chorder';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useChordContext } from '@/contexts/ChordContext';

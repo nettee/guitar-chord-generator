@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { drawChord } from '@/chorder/drawChord';
+import { drawChord } from '@/chorder';
 import { chordData } from '@/data/chords';
 
 const Chord = ({ name }) => {

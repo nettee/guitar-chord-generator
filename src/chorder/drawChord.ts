@@ -1,5 +1,5 @@
-import { ChordBox } from './chordbox';
-import { ChordDefinition, ChordBoxParams } from '@/types';
+import { ChordBox, ChordBoxParams } from './chordbox';
+import { ChordDefinition } from '@/types';
 
 /**
  * 绘制和弦图的工具函数
